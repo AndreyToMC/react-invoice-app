@@ -1,33 +1,31 @@
 import React, { Component } from 'react';
 import { ConnectedRouter } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { store } from '../services/store';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import history from '../services/history';
 import MainPage from '../components/mainPage';
-import CustomersPage from '../components/customersPage'
+import CustomersPageContainer from './customersPageContainer'
 import InvoicePage from '../components/invoicePage'
-import ProductsPage from '../components/productsPage'
+import ProductsPageContainer from './productsPageContainer'
 import ViewModePage from '../components/viewModePage'
-import Header from '../components/header';
+import HeaderContainer from './headerContainer';
+import AppContainer from './appContainer'
 
-const history = createHistory();
+
 
 class AppRouter extends Component {
   render() {
     return (
-      <Provider store={store}>
         <ConnectedRouter history={history}>
           <div>
-            <Header />
+            <HeaderContainer />
             <Route exact path="/" component={MainPage} />
-            <Route path="/customers" component={CustomersPage} />
+            <Route path="/customers" component={CustomersPageContainer} />
             <Route exact path="/invoices" component={InvoicePage} />
-            <Route path="/products" component={ProductsPage} />
+            <Route path="/products" component={ProductsPageContainer} />
             <Route path="/invoices/:id" component={ViewModePage} />
           </div>
         </ConnectedRouter>
-      </Provider>
     );
   }
 }

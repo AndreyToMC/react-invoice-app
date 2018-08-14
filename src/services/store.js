@@ -9,8 +9,14 @@ import mainReducer from '../reducers/mainReducer';
 import history from './history'
 
 
-export const store = createStore(mainReducer, composeWithDevTools(
-  applyMiddleware(thunk, promiseMiddleware(), routerMiddleware(history)),
+export const store = createStore(
+  mainReducer,
+  composeWithDevTools(
+    applyMiddleware(
+      thunk,
+      promiseMiddleware(),
+      routerMiddleware(history)
+    ),
 ));
 
 // export const history = syncHistoryWithStore(createBrowserHistory(), store);

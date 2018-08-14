@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-
 import { Table } from 'reactstrap';
-import { getProducts } from '../actions/productsActions';
 
-class ProductsPage extends Component {
-  componentDidMount() {
-    this.props.getProducts()
-  }
-
-  render() {
+const ProductsPage = ({products}) => {
     return (
       <Table>
         <thead>
@@ -20,7 +11,7 @@ class ProductsPage extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.props.products.map((elem) =>{
+          {products.map((elem) =>{
             return (
               <tr>
                 <td>{elem.name}</td>
@@ -36,15 +27,5 @@ class ProductsPage extends Component {
       </Table>
     );
   }
-}
 
-function mapStateToProps(state) {
-  return { products: state.products };
-}
-function mapDispatchToProps(dispatch) {
-  return { getProducts: bindActionCreators(getProducts, dispatch) };
-}
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProductsPage)
+export default ProductsPage
