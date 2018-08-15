@@ -7,34 +7,89 @@ class CreateInvoicePageContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            productsPriceById:{
+
+            },
+            errorValidation:'',
             customerInput: '',
-            productsInputs: [''],
+            productsInput: '',
+            qtyInput:0,
+            productPriceWithQty:0.00,
+            invoiceItems: []
         };
+    }
+    componentDidMount() {
+        setTimeout(()=>{
+          let productsPriceById = this.getProductsPriceById(this.props.products)
+            this.setState({productsPriceById: productsPriceById})
+        },10)
     }
     onCustomerChange = (e) => {
         this.setState({ customerInput: e.target.value})
     }
     onProductChange = (e) => {
-        const inputId = e.target.id
-        const productId = e.target.value
-        this.setState( (state, next) => {
-            let newState = Object.assign({}, state)
-            newState.productsInputs = newState.productsInputs.filter(elem => elem !== '')
-            newState.productsInputs[inputId] = productId
-            var count = newState.productsInputs.reduce((prev, elem)=>{
-                if(elem !== ''){
-                    return prev
-                } else return prev += 1
-            },0)
-            if(count < 1 ) {
-                newState.productsInputs.push('')
-            }
-            return newState
-        })
+        let productId = e.target.value
+        let productPriceWithQty = this.state.productsPriceById[productId]*this.state.qtyInput
+        console.log(productPriceWithQty)
+        this.setState({productsInput: productId, productPriceWithQty})
     }
+
+    onQtyInputChange = (e) => {
+        let quantity = e.target.value
+        let productId = this.state.productsInput
+        if(productId && quantity>=0 ){
+            let productPriceWithQty = this.state.productsPriceById[productId]*quantity
+            this.setState({qtyInput: quantity, productPriceWithQty})
+        }
+    }
+    addProduct = (e) => {
+        console.log(e.target)
+        let {productsInput, qtyInput, customerInput, productPriceWithQty} = this.state
+
+        !qtyInput && this.setState({errorValidation: 'please set quantity'})
+        !productsInput && this.setState({errorValidation: 'please set product'})
+        !customerInput && this.setState({errorValidation: 'please set customer'})
+
+        if ( qtyInput && productsInput && customerInput){
+            this.setState( (prevState)=> {
+                let state = Object.assign({}, prevState)
+                state.errorValidation = ''
+                state.invoiceItems.push({productId: productsInput, quantity: qtyInput, price: productPriceWithQty})
+                state.productsInput = 'default'
+                state.qtyInput = 0
+                state.productPriceWithQty = 0.00
+                return state
+            })
+        }
+
+    }
+    getProductsPriceById = (products) => {
+        var productsPriceById = {}
+        products.forEach(elem => {
+            let id = elem.id;
+            let price = elem.price;
+            console.log(id, price)
+            productsPriceById[id] = price
+        })
+        return productsPriceById
+    }
+
     render() {
+        console.log(this.state)
         return (
-            <CreateInvoicePage productsInputCounter={this.state.productsInputs} onProductChange={this.onProductChange} onCustomerChange={this.onCustomerChange} customers={this.props.customers} products={this.props.products} />
+            <CreateInvoicePage
+                error={this.state.errorValidation}
+                addProduct={this.addProduct}
+                productsInput={this.state.productsInput}
+                onProductChange={this.onProductChange}
+                onCustomerChange={this.onCustomerChange}
+                customers={this.props.customers}
+                products={this.props.products}
+                qtyInputValue={this.state.qtyInput}
+                onQtyInputChange={this.onQtyInputChange}
+                productPriceWithQty={this.state.productPriceWithQty}
+                invoiceItems={this.state.invoiceItems}
+            />
         );
     }
 }

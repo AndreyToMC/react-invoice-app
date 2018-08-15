@@ -17,15 +17,24 @@ class CreateInvoicePage extends Component {
                 <Col>Qty</Col>
                 <Col>Price</Col>
               </Row>
-              {this.props.productsInputCounter ? this.props.productsInputCounter.map((elem, id)=>{
-                return (
-                  <Row>
-                      <Col><DropBox id={id} onSelectChange={this.props.onProductChange} values={this.props.products} /></Col>
-                      <Col><InputNumber /></Col>
-                      <Col>0.00</Col>
-                  </Row>
+              <Row>
+                <Col><DropBox defaultValue={this.props.productsInput} id="productsInput" onSelectChange={this.props.onProductChange} values={this.props.products} /></Col>
+                <Col><InputNumber onChange={this.props.onQtyInputChange} id="qtyInput" value={this.props.qtyInputValue} /></Col>
+                <Col>{this.props.productPriceWithQty.toFixed(2)}</Col>
+                <Col onClick={this.props.addProduct}>Add</Col>
+              </Row>
+              <Row>{this.props.error ? <p className="text-danger">{this.props.error}</p> : null}</Row>
+              {this.props.invoiceItems && this.props.invoiceItems.map((elem) => {
+                return(
+                    <Row>
+                        <Col><DropBox defaultValue={elem.productId} id="productsInput" onSelectChange={this.props.onProductChange} values={this.props.products} /></Col>
+                        <Col><InputNumber onChange={this.props.onQtyInputChange} id="qtyInput" value={parseInt(elem.quantity)} /></Col>
+                        <Col>${elem.price.toFixed(2)}</Col>
+                        <Col>delete</Col>
+                    </Row>
                 )
-              })  : null}
+                })
+              }
             </Container>
             <Row>
               <Col>Total</Col>
