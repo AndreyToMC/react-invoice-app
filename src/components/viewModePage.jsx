@@ -1,36 +1,40 @@
 import React, { Component } from 'react';
-
+import { Container, Row, Col } from 'reactstrap';
 
 class ViewModePage extends Component {
-
   render() {
     return (
-      <div>
-        <p>Invoice #1</p>
-        <div> Mark Benson</div>
-        <div>
-          <div>
-            <div> Products </div>
-            <div> QTY </div>
-            <div> Price </div>
-          </div>
-          <div>
-            <div> phone </div>
-            <div> 1 </div>
-            <div> 9$ </div>
-          </div>
-          <div>
-            <div> parash </div>
-            <div> 2 </div>
-            <div> 55$ </div>
-          </div>
-        </div>
-        <div>
-          <div> discount </div>
-          <div> 13 </div>
-        </div>
-        <div> total 60#</div>
-      </div>
+      <Container>
+          <Row>
+              <Col>
+                  <Row>Invoice #1</Row>
+                  <Row>Mark Benson</Row>
+                  <Row>
+                      <Col>Products</Col>
+                      <Col>Qty</Col>
+                      <Col>Price</Col>
+                  </Row>
+                  <Row>
+                      <Col>Products</Col>
+                      <Col>Qty</Col>
+                      <Col>Price</Col>
+                  </Row>
+                  <Row>
+                      <Col>Products</Col>
+                      <Col>Qty</Col>
+                      <Col>Price</Col>
+                  </Row>
+                  <Row>
+                      <Col>Total</Col>
+                      <Col>60$</Col>
+                  </Row>
+              </Col>
+              <Col>
+                  <Row>Discount %</Row>
+                  <Row>13</Row>
+              </Col>
+          </Row>
+      </Container>
     );
   }
 }

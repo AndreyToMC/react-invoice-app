@@ -3,22 +3,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 class MainPageContainer extends Component {
-
   render() {
     return (
-      <div></div>
+      <div />
     );
   }
-
 }
 
 function mapStateToProps(state) {
-  return {  };
+  return { };
 }
 function mapDispatchToProps(dispatch) {
-  return {  };
+  return { };
 }
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MainPageContainer)
+)(MainPageContainer);

@@ -1,11 +1,11 @@
 
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import AppRouter from './appRouting';
-import { getCustomers } from '../actions/customersActions'
+import { getCustomers } from '../actions/customersActions';
 import { getProducts } from '../actions/productsActions';
 
 
@@ -14,18 +14,18 @@ class AppContainer extends Component {
     this.props.getCustomers();
     this.props.getProducts();
   }
+
   render() {
     return (
-        <AppRouter />
+      <AppRouter />
     );
   }
-
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     getCustomers: bindActionCreators(getCustomers, dispatch),
-    getProducts: bindActionCreators(getProducts, dispatch)
+    getProducts: bindActionCreators(getProducts, dispatch),
   };
 }
 

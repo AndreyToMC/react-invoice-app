@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import ProductsPage from '../components/productsPage'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ProductsPage from '../components/productsPage';
 import { getProducts } from '../actions/productsActions';
 
 class ProductsPageContainer extends Component {
-
   render() {
     return (
-      <ProductsPage products={this.props.products}/>
+      <ProductsPage products={this.props.products} />
     );
   }
-
 }
 
 function mapStateToProps(state) {
@@ -23,4 +21,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ProductsPageContainer)
+)(ProductsPageContainer);
