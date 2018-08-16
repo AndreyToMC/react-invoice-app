@@ -13,7 +13,7 @@ class ProductsPageContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  return { products: state.products };
+  return { products: state.products.productsList };
 }
 function mapDispatchToProps(dispatch) {
   return { getProducts: bindActionCreators(getProducts, dispatch) };

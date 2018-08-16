@@ -4,101 +4,151 @@ import { bindActionCreators } from 'redux';
 import CreateInvoicePage from '../components/create-new-invoice-page/createInvoicePage';
 
 class CreateInvoicePageContainer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            productsPriceById:{
+  constructor(props) {
+    super(props);
+    this.state = {
+      customerInput: '',
+      invoiceItemsInputs: [],
+      addInput: {
+        productInput: '',
+        qtyInput: 0,
+        priceValue: 0,
+      },
+      totalPrice: 0,
+      discountInput: 0,
+    };
+    this.onAddInputsChange = this.onAddInputsChange.bind(this);
+    this.onItemListInputChange = this.onItemListInputChange.bind(this);
+    this.getProductPrice = this.getProductPrice.bind(this);
+    this.getTotalPrice = this.getTotalPrice.bind(this);
+  }
 
-            },
-            errorValidation:'',
-            customerInput: '',
-            productsInput: '',
-            qtyInput:0,
-            productPriceWithQty:0.00,
-            invoiceItems: []
-        };
+  getTotalPrice(state, discount) {
+    const itemsTotalPrice = state.invoiceItemsInputs.reduce((ac, elem) => ac + parseFloat(elem.productPriceTotal), 0);
+    if (discount) {
+      const itemsTotalPriceWithDiscount = itemsTotalPrice - (itemsTotalPrice * discount / 100);
+      return itemsTotalPriceWithDiscount.toFixed(2);
     }
-    componentDidMount() {
-        setTimeout(()=>{
-          let productsPriceById = this.getProductsPriceById(this.props.products)
-            this.setState({productsPriceById: productsPriceById})
-        },10)
-    }
-    onCustomerChange = (e) => {
-        this.setState({ customerInput: e.target.value})
-    }
-    onProductChange = (e) => {
-        let productId = e.target.value
-        let productPriceWithQty = this.state.productsPriceById[productId]*this.state.qtyInput
-        console.log(productPriceWithQty)
-        this.setState({productsInput: productId, productPriceWithQty})
-    }
+    const itemTotalPriceStateDiscount = itemsTotalPrice - (itemsTotalPrice * state.discountInput / 100);
+    return itemTotalPriceStateDiscount.toFixed(2);
+  }
 
-    onQtyInputChange = (e) => {
-        let quantity = e.target.value
-        let productId = this.state.productsInput
-        if(productId && quantity>=0 ){
-            let productPriceWithQty = this.state.productsPriceById[productId]*quantity
-            this.setState({qtyInput: quantity, productPriceWithQty})
+  getProductPrice(productId, qty) {
+    const productPrice = this.props.productsPriceById[productId];
+    return qty * productPrice;
+  }
+
+  onAddInputsChange(e) {
+    switch (e.target.name) {
+      case 'customerInput':
+        const customerId = e.target.value;
+        this.setState({ customerInput: customerId });
+        break;
+      case 'productInput':
+        const productId = e.target.value;
+        this.setState((prevState) => {
+          const newState = Object.assign({}, prevState);
+          const qtyValue = prevState.addInput.qtyInput;
+          const productPriceTotal = this.getProductPrice(productId, qtyValue);
+          newState.invoiceItemsInputs.push({ productId, qtyValue, productPriceTotal });
+          newState.addInput.qtyInput = 0;
+          newState.totalPrice = this.getTotalPrice(newState);
+          return newState;
+        });
+        break;
+      case 'qtyInput':
+        const quantity = e.target.value;
+        if (quantity >= 0) {
+          this.setState((prevState) => {
+            const newState = Object.assign({}, prevState);
+            newState.addInput.qtyInput = quantity;
+            newState.totalPrice = this.getTotalPrice(newState);
+            return newState;
+          });
         }
-    }
-    addProduct = (e) => {
-        console.log(e.target)
-        let {productsInput, qtyInput, customerInput, productPriceWithQty} = this.state
-
-        !qtyInput && this.setState({errorValidation: 'please set quantity'})
-        !productsInput && this.setState({errorValidation: 'please set product'})
-        !customerInput && this.setState({errorValidation: 'please set customer'})
-
-        if ( qtyInput && productsInput && customerInput){
-            this.setState( (prevState)=> {
-                let state = Object.assign({}, prevState)
-                state.errorValidation = ''
-                state.invoiceItems.push({productId: productsInput, quantity: qtyInput, price: productPriceWithQty})
-                state.productsInput = 'default'
-                state.qtyInput = 0
-                state.productPriceWithQty = 0.00
-                return state
-            })
+        break;
+      case 'discountInput':
+        if (e.target.value >= 0 && e.target.value <= 50) {
+          const discountInput = e.target.value;
+          const totalPrice = (this.getTotalPrice(this.state, discountInput));
+          this.setState({ discountInput, totalPrice });
         }
+        break;
+      default:
+    }
+  }
 
+  onItemListInputChange(e) {
+    const inputId = e.target.id;
+    switch (e.target.name) {
+      case 'listItemProductInput':
+        const productId = e.target.value;
+        this.setState((prevState) => {
+          const newState = Object.assign({}, prevState);
+          const quantity = newState.invoiceItemsInputs[inputId].qtyValue;
+          const productPrice = this.getProductPrice(productId, quantity);
+          newState.invoiceItemsInputs[inputId].productId = productId;
+          newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
+          newState.totalPrice = this.getTotalPrice(newState);
+          return newState;
+        });
+        break;
+      case 'listItemQtyInput':
+        const quantity = e.target.value;
+        if (quantity >= 0) {
+          this.setState((prevState) => {
+            const newState = Object.assign({}, prevState);
+            const productId = newState.invoiceItemsInputs[inputId].productId;
+            const productPrice = this.getProductPrice(productId, quantity);
+            newState.invoiceItemsInputs[inputId].qtyValue = quantity;
+            newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
+            newState.totalPrice = this.getTotalPrice(newState);
+            return newState;
+          });
+        }
+        break;
+      default:
     }
-    getProductsPriceById = (products) => {
-        var productsPriceById = {}
-        products.forEach(elem => {
-            let id = elem.id;
-            let price = elem.price;
-            console.log(id, price)
-            productsPriceById[id] = price
-        })
-        return productsPriceById
-    }
+  }
 
-    render() {
-        console.log(this.state)
-        return (
-            <CreateInvoicePage
-                error={this.state.errorValidation}
-                addProduct={this.addProduct}
-                productsInput={this.state.productsInput}
-                onProductChange={this.onProductChange}
-                onCustomerChange={this.onCustomerChange}
-                customers={this.props.customers}
-                products={this.props.products}
-                qtyInputValue={this.state.qtyInput}
-                onQtyInputChange={this.onQtyInputChange}
-                productPriceWithQty={this.state.productPriceWithQty}
-                invoiceItems={this.state.invoiceItems}
-            />
-        );
-    }
+  onSubmit() {
+
+  }
+
+  render() {
+    const {
+      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput,
+    } = this.state;
+    return (
+      <CreateInvoicePage
+        onSubmit={this.onSubmit}
+        onAddInputsChange={this.onAddInputsChange}
+        onItemListInputChange={this.onItemListInputChange}
+        customers={this.props.customers}
+        customerInputValue={customerInput}
+        products={this.props.products}
+        productInputValue={addInput.productInput}
+        qtyInputValue={addInput.qtyInput}
+        invoiceItemsInputs={invoiceItemsInputs}
+        discountInput={discountInput}
+        totalPrice={totalPrice}
+      />
+    );
+  }
 }
 
 function mapStateToProps(state) {
-    return { customers: state.customers, products: state.products };
+  return {
+    customers: state.customers,
+    products: state.products.productsList,
+    productsPriceById: state.products.productsPriceById,
+  };
 }
-
+function mapDispatchToProps(dispatch) {
+  return {
+  };
+}
 export default connect(
-    mapStateToProps,
-
+  mapStateToProps,
+  mapDispatchToProps,
 )(CreateInvoicePageContainer);

@@ -1,49 +1,62 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import {
+  Container, Row, Col, Form,
+} from 'reactstrap';
 import DropBox from './dropBox';
 import InputNumber from './inputNumber';
+import InvoiceItemsList from './invoiceItemsList';
 
 class CreateInvoicePage extends Component {
   render() {
+    const {
+      onAddInputsChange,
+      customers,
+      customerInputValue,
+      products,
+      productInputValue,
+      qtyInputValue,
+      invoiceItemsInputs,
+      onItemListInputChange,
+      discountInput,
+      totalPrice,
+    } = this.props;
     return (
       <Container>
         <Row>
           <Col>
             <Row>Invoice #1</Row>
             <Container>
-              <Row><DropBox onSelectChange={this.props.onCustomerChange} values={this.props.customers} id="customersInput" /></Row>
+              <DropBox selected={customerInputValue} onChange={onAddInputsChange} values={customers} placeholder="Select Name" name="customerInput" key="customerInput" />
               <Row>
-                <Col>Products</Col>
-                <Col>Qty</Col>
-                <Col>Price</Col>
+                <Col>
+                  Products
+                </Col>
+                <Col>
+                  Qty
+                </Col>
+                <Col>
+                  Price
+                </Col>
               </Row>
+              <InvoiceItemsList onItemListInputChange={onItemListInputChange} invoiceItemsInputs={invoiceItemsInputs} onChange={onAddInputsChange} values={products} />
               <Row>
-                <Col><DropBox defaultValue={this.props.productsInput} id="productsInput" onSelectChange={this.props.onProductChange} values={this.props.products} /></Col>
-                <Col><InputNumber onChange={this.props.onQtyInputChange} id="qtyInput" value={this.props.qtyInputValue} /></Col>
-                <Col>{this.props.productPriceWithQty.toFixed(2)}</Col>
-                <Col onClick={this.props.addProduct}>Add</Col>
+                <Col>
+                  <DropBox selected={productInputValue} onChange={onAddInputsChange} values={products} placeholder="Add Product" name="productInput" key="productInput" />
+                </Col>
+                <Col><InputNumber value={qtyInputValue} name="qtyInput" onChange={onAddInputsChange} /></Col>
+                <Col>$0.00</Col>
               </Row>
-              <Row>{this.props.error ? <p className="text-danger">{this.props.error}</p> : null}</Row>
-              {this.props.invoiceItems && this.props.invoiceItems.map((elem) => {
-                return(
-                    <Row>
-                        <Col><DropBox defaultValue={elem.productId} id="productsInput" onSelectChange={this.props.onProductChange} values={this.props.products} /></Col>
-                        <Col><InputNumber onChange={this.props.onQtyInputChange} id="qtyInput" value={parseInt(elem.quantity)} /></Col>
-                        <Col>${elem.price.toFixed(2)}</Col>
-                        <Col>delete</Col>
-                    </Row>
-                )
-                })
-              }
             </Container>
-            <Row>
-              <Col>Total</Col>
-              <Col>60$</Col>
-            </Row>
+            <Container>
+              <Row>
+                <Col>Total</Col>
+                <Col>{totalPrice}</Col>
+              </Row>
+            </Container>
           </Col>
           <Col>
             <Row>Discount %</Row>
-            <Row><InputNumber /></Row>
+            <Row><InputNumber value={discountInput} name="discountInput" onChange={onAddInputsChange}/></Row>
           </Col>
         </Row>
         <Row>Save Invoice</Row>
