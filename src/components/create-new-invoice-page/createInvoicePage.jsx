@@ -19,6 +19,7 @@ class CreateInvoicePage extends Component {
       onItemListInputChange,
       discountInput,
       totalPrice,
+      onSubmit,
     } = this.props;
     return (
       <Container>
@@ -59,7 +60,7 @@ class CreateInvoicePage extends Component {
             <Row><InputNumber value={discountInput} name="discountInput" onChange={onAddInputsChange}/></Row>
           </Col>
         </Row>
-        <Row>Save Invoice</Row>
+        <button onClick={onSubmit}>Save Invoice</button>
       </Container>
     );
   }

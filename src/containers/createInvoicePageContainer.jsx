@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CreateInvoicePage from '../components/create-new-invoice-page/createInvoicePage';
+import { sendInvoices } from '../actions/invoicesActions'
+import { deleteInvoice } from '../actions/invoicesActions'
 
 class CreateInvoicePageContainer extends Component {
   constructor(props) {
@@ -21,6 +23,7 @@ class CreateInvoicePageContainer extends Component {
     this.onItemListInputChange = this.onItemListInputChange.bind(this);
     this.getProductPrice = this.getProductPrice.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   getTotalPrice(state, discount) {
@@ -112,7 +115,8 @@ class CreateInvoicePageContainer extends Component {
   }
 
   onSubmit() {
-
+    console.log('asd')
+    this.props.deleteInvoice(1)
   }
 
   render() {
@@ -146,6 +150,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
+    deleteInvoice: bindActionCreators(deleteInvoice, dispatch),
+    sendInvoices: bindActionCreators(sendInvoices, dispatch)
   };
 }
 export default connect(
