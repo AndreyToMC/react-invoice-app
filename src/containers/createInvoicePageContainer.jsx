@@ -7,6 +7,7 @@ class CreateInvoicePageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      errorMsg: {},
       customerInput: '',
       invoiceItemsInputs: [],
       addInput: {
@@ -21,6 +22,7 @@ class CreateInvoicePageContainer extends Component {
     this.onItemListInputChange = this.onItemListInputChange.bind(this);
     this.getProductPrice = this.getProductPrice.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   getTotalPrice(state, discount) {
@@ -112,12 +114,22 @@ class CreateInvoicePageContainer extends Component {
   }
 
   onSubmit() {
+    const {invoiceItemsInputs, discountInput, totalPrice, customerInput} = this.state
+    this.setState({errorMsg: {}})
+    this.setState( (prewState) => {
+      let newState = Object.assign({}, prewState)
 
+      !customerInput && (newState.errorMsg['customerInput'] = 'please select customer');
+      invoiceItemsInputs.length < 1 && (newState.errorMsg['invoiceItems'] = 'please select products');
+      totalPrice > 0 && (newState.errorMsg['price'] = 'please select products');
+      return newState
+    })
   }
 
   render() {
+    console.log(this.state)
     const {
-      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput,
+      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, errorMsg,
     } = this.state;
     return (
       <CreateInvoicePage
@@ -132,6 +144,7 @@ class CreateInvoicePageContainer extends Component {
         invoiceItemsInputs={invoiceItemsInputs}
         discountInput={discountInput}
         totalPrice={totalPrice}
+        errors={errorMsg}
       />
     );
   }

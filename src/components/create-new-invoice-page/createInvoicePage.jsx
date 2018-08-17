@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Container, Row, Col, Form,
+  Container, Row, Col, Form, Button
 } from 'reactstrap';
 import DropBox from './dropBox';
 import InputNumber from './inputNumber';
@@ -10,15 +10,17 @@ class CreateInvoicePage extends Component {
   render() {
     const {
       onAddInputsChange,
+      onItemListInputChange,
+      onSubmit,
       customers,
       customerInputValue,
       products,
       productInputValue,
       qtyInputValue,
       invoiceItemsInputs,
-      onItemListInputChange,
       discountInput,
       totalPrice,
+      errors,
     } = this.props;
     return (
       <Container>
@@ -27,6 +29,7 @@ class CreateInvoicePage extends Component {
             <Row>Invoice #1</Row>
             <Container>
               <DropBox selected={customerInputValue} onChange={onAddInputsChange} values={customers} placeholder="Select Name" name="customerInput" key="customerInput" />
+              <Row  className='text-danger'>{errors.customerInput&&errors.customerInput}</Row>
               <Row>
                 <Col>
                   Products
@@ -38,6 +41,7 @@ class CreateInvoicePage extends Component {
                   Price
                 </Col>
               </Row>
+              <Row className='text-danger'>{errors.invoiceItems&&errors.invoiceItems}</Row>
               <InvoiceItemsList onItemListInputChange={onItemListInputChange} invoiceItemsInputs={invoiceItemsInputs} onChange={onAddInputsChange} values={products} />
               <Row>
                 <Col>
@@ -56,10 +60,10 @@ class CreateInvoicePage extends Component {
           </Col>
           <Col>
             <Row>Discount %</Row>
-            <Row><InputNumber value={discountInput} name="discountInput" onChange={onAddInputsChange}/></Row>
+            <Row><InputNumber value={discountInput} name="discountInput" onChange={onAddInputsChange} /></Row>
           </Col>
         </Row>
-        <Row>Save Invoice</Row>
+        <Row><Button onClick={onSubmit} > send Invoice</Button></Row>
       </Container>
     );
   }
