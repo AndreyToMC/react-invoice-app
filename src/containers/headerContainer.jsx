@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 class HeaderContainer extends Component {
   toNewInvoice = () => {
-    this.props.push('/invoices/2')
+    this.props.push('/create_invoice')
   }
   render() {
-    console.log(this.props)
     return (
       <Header invoicesCuont={this.props.invoicesCuont} toNewInvoice={this.toNewInvoice}/>
     );

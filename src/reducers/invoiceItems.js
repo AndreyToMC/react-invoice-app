@@ -1,11 +1,11 @@
 
-
-const invoices = (state = [], action) => {
+const invoiceItems = (state = [], action) => {
   switch (action.type) {
-    case 'GET_INVOICES_FULFILLED':
-      const invoicesArr = action.payload;
-      return [...invoicesArr];
-    case 'SEND_INVOICES_FULFILLED':
+      case 'GET_INVOICE_ITEMS_FULFILLED':
+      console.log(action.payload)
+      const invoiceItemsArr = action.payload;
+      return [...invoiceItemsArr];
+    case 'CHANGE_INVOICE_ITEMS_FULFILLED':
       const newInvoice = action.payload.data
       let newInvoiceArr = []
       newInvoiceArr = newInvoiceArr.concat(state)
@@ -16,4 +16,4 @@ const invoices = (state = [], action) => {
   }
 }
 
-export default invoices;
+export default invoiceItems;

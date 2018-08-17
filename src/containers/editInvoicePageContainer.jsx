@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Prompt } from "react-router-dom";
-import CreateInvoicePage from '../components/create-new-invoice-page/createInvoicePage';
-import { push } from 'react-router-redux';
-import { sendInvoices } from '../actions/invoicesActions';
-import { deleteInvoice } from '../actions/invoicesActions';
+import EditInvoicePage from '../components/edit-invoice-page/editInvoicePage';
+import { getInvoicesItems } from '../actions/invoicesItemsActions';
+
 
 class CreateInvoicePageContainer extends Component {
   constructor(props) {
@@ -20,11 +18,18 @@ class CreateInvoicePageContainer extends Component {
       },
       totalPrice: 0,
       discountInput: 0,
+      invoiceId: 0,
     };
     this.onAddInputsChange = this.onAddInputsChange.bind(this);
     this.onItemListInputChange = this.onItemListInputChange.bind(this);
     this.getProductPrice = this.getProductPrice.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
+  }
+
+  componentDidMount() {
+    const invoiceId = this.props.match.params.id;
+    this.props.getInvoicesItems(invoiceId);
+    this.setState({ invoiceId });
   }
 
   getTotalPrice(state, discount) {
@@ -48,7 +53,6 @@ class CreateInvoicePageContainer extends Component {
         const customerId = e.target.value;
         this.setState((prevState) => {
           const newState = Object.assign({}, prevState);
-          newState.errorMsg.customerInput = '';
           newState.customerInput = customerId;
           newState.isBlocking = true;
           return newState;
@@ -61,7 +65,6 @@ class CreateInvoicePageContainer extends Component {
           const qtyValue = prevState.addInput.qtyInput;
           const productPriceTotal = this.getProductPrice(productId, qtyValue);
           newState.invoiceItemsInputs.push({ productId, qtyValue, productPriceTotal });
-          newState.errorMsg.invoiceItems = '';
           newState.addInput.qtyInput = 0;
           newState.isBlocking = true;
           newState.totalPrice = this.getTotalPrice(newState);
@@ -115,7 +118,6 @@ class CreateInvoicePageContainer extends Component {
             newState.invoiceItemsInputs[inputId].qtyValue = quantity;
             newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
             newState.totalPrice = this.getTotalPrice(newState);
-            newState.errorMsg.price = '';
             return newState;
           });
         }
@@ -125,25 +127,27 @@ class CreateInvoicePageContainer extends Component {
   }
 
   render() {
-    console.log(this.state)
     const {
-      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput,
+      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, invoiceId,
     } = this.state;
+    const {
+      invoiceItems, customers, products,
+    } = this.props;
     return (
-      <CreateInvoicePage
-        editMode={true}
-        invoicesId={this.props.invoiceId}
+      <EditInvoicePage
+        invoicesId={invoiceId}
         onSubmit={this.onSubmit}
         onAddInputsChange={this.onAddInputsChange}
         onItemListInputChange={this.onItemListInputChange}
-        customers={this.props.customers}
+        customers={customers}
         customerInputValue={customerInput}
-        products={this.props.products}
+        products={products}
         productInputValue={addInput.productInput}
         qtyInputValue={addInput.qtyInput}
-        invoiceItemsInputs={invoiceItemsInputs}
+        invoiceItemsInputs={invoiceItems}
         discountInput={discountInput}
         totalPrice={totalPrice}
+        getProductPrice={this.getProductPrice}
       />
     );
   }
@@ -154,14 +158,13 @@ function mapStateToProps(state) {
     customers: state.customers.customersList,
     products: state.products.productsList,
     productsPriceById: state.products.productsPriceById,
-    invoiceId: state.invoices.length +1
+    invoiceItems: state.invoiceItems,
+    invoices: state.invoices,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    deleteInvoice: bindActionCreators(deleteInvoice, dispatch),
-    sendInvoices: bindActionCreators(sendInvoices, dispatch),
-    push: bindActionCreators(push, dispatch),
+    getInvoicesItems: bindActionCreators(getInvoicesItems, dispatch),
   };
 }
 export default connect(

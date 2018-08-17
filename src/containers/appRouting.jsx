@@ -8,6 +8,7 @@ import MainPageContainer from './mainPageContainer';
 import CustomersPageContainer from './customersPageContainer';
 import InvoicePageContainer from './invoicePageContainer';
 import ProductsPageContainer from './productsPageContainer';
+import EditInvoicePageContainer from './editInvoicePageContainer';
 import CreateInvoicePageContainer from './createInvoicePageContainer';
 import HeaderContainer from './headerContainer';
 import AppContainer from './appContainer';
@@ -24,7 +25,8 @@ class AppRouter extends Component {
             <Route path="/customers" component={CustomersPageContainer} />
             <Route exact path="/invoices" component={InvoicePageContainer} />
             <Route path="/products" component={ProductsPageContainer} />
-            <Route path="/invoices/:id" component={CreateInvoicePageContainer} />
+            <Route path="/invoices/:id" component={EditInvoicePageContainer} />
+            <Route path="/create_invoice" component={CreateInvoicePageContainer} />
           </Container>
         </div>
       </ConnectedRouter>

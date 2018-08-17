@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Table } from 'reactstrap';
 
-const mainPage = ({ invoices, customersNames }) => (
+const mainPage = ({ invoices, customersNames, toInvoice }) => (
   <Table hover>
     <thead>
     <tr>
@@ -14,9 +14,9 @@ const mainPage = ({ invoices, customersNames }) => (
     </tr>
     </thead>
     {invoices.length && invoices.map((elem, i) => (
-      <tbody key={i}>
-      <tr>
-        <th scope="row">{elem.id}</th>
+      <tbody key={i} onClick={toInvoice} >
+      <tr id={elem.id}>
+        <td scope="row">{elem.id}</td>
         <td>{customersNames[elem.customer_id]}</td>
         <td>{elem.discount}%</td>
         <td>${elem.total}</td>

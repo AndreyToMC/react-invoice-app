@@ -7,7 +7,7 @@ import { push } from 'react-router-redux';
 import { sendInvoices } from '../actions/invoicesActions';
 import { deleteInvoice } from '../actions/invoicesActions';
 
-class CreateInvoicePageContainer extends Component {
+class EditInvoicePageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -147,7 +147,7 @@ class CreateInvoicePageContainer extends Component {
       return
     }
     this.setState({isBlocking: false})
-    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, invoiceItemsInputs)
+    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, this.redirect)
 
   }
 
@@ -158,21 +158,21 @@ class CreateInvoicePageContainer extends Component {
     } = this.state;
     return (
       <div>
-      <CreateInvoicePage
-        invoicesId={this.props.invoiceId}
-        onSubmit={this.onSubmit}
-        onAddInputsChange={this.onAddInputsChange}
-        onItemListInputChange={this.onItemListInputChange}
-        customers={this.props.customers}
-        customerInputValue={customerInput}
-        products={this.props.products}
-        productInputValue={addInput.productInput}
-        qtyInputValue={addInput.qtyInput}
-        invoiceItemsInputs={invoiceItemsInputs}
-        discountInput={discountInput}
-        totalPrice={totalPrice}
-        errors={errorMsg}
-      />
+        <CreateInvoicePage
+          invoicesId={this.props.invoiceId}
+          onSubmit={this.onSubmit}
+          onAddInputsChange={this.onAddInputsChange}
+          onItemListInputChange={this.onItemListInputChange}
+          customers={this.props.customers}
+          customerInputValue={customerInput}
+          products={this.props.products}
+          productInputValue={addInput.productInput}
+          qtyInputValue={addInput.qtyInput}
+          invoiceItemsInputs={invoiceItemsInputs}
+          discountInput={discountInput}
+          totalPrice={totalPrice}
+          errors={errorMsg}
+        />
         <Prompt when={isBlocking} message={location =>
           `Are you sure you want to go to ${location.pathname}`
         }/>
@@ -199,4 +199,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CreateInvoicePageContainer);
+)(EditInvoicePageContainer);

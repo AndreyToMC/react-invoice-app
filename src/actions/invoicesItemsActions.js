@@ -1,11 +1,13 @@
 import { apiURL } from '../services/apiURL';
 import axios from 'axios'
-export const getInvoicesItems   = () => ({
-  type: 'GET_INVOICES_ITEM',
-  payload: axios.get(apiURL + '/api/invoices').then(res => res.data)
+
+
+export const getInvoicesItems = (id) => ({
+  type: 'GET_INVOICE_ITEMS',
+  payload: axios.get(`${apiURL}/api/invoices/${id}/items`).then(res => res.data),
 });
 
-export const addInvoicesItems = (data) => {
+export const addInvoicesItems = (data, id) => {
   return (dispatch) => {
       axios.post(`${apiURL}/api/invoices/${id}/items`, {customer_id: 1, discount: 10, total:150}).then( res => console.log(res))
   };
