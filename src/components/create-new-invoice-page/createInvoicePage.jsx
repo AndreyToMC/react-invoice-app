@@ -52,6 +52,7 @@ class CreateInvoicePage extends Component {
               </Row>
             </Container>
             <Container>
+              <Row className='text-danger'>{errors.price&&errors.price}</Row>
               <Row>
                 <Col>Total</Col>
                 <Col>{totalPrice}</Col>

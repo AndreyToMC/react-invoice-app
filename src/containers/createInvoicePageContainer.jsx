@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CreateInvoicePage from '../components/create-new-invoice-page/createInvoicePage';
+import { sendInvoices } from '../actions/invoicesActions';
+import { deleteInvoice } from '../actions/invoicesActions';
 
 class CreateInvoicePageContainer extends Component {
   constructor(props) {
@@ -44,7 +46,12 @@ class CreateInvoicePageContainer extends Component {
     switch (e.target.name) {
       case 'customerInput':
         const customerId = e.target.value;
-        this.setState({ customerInput: customerId });
+        this.setState((prevState) => {
+          const newState = Object.assign({}, prevState);
+          newState.errorMsg.customerInput = '';
+          newState.customerInput = customerId;
+          return newState;
+        });
         break;
       case 'productInput':
         const productId = e.target.value;
@@ -53,6 +60,7 @@ class CreateInvoicePageContainer extends Component {
           const qtyValue = prevState.addInput.qtyInput;
           const productPriceTotal = this.getProductPrice(productId, qtyValue);
           newState.invoiceItemsInputs.push({ productId, qtyValue, productPriceTotal });
+          newState.errorMsg.invoiceItems = '';
           newState.addInput.qtyInput = 0;
           newState.totalPrice = this.getTotalPrice(newState);
           return newState;
@@ -105,6 +113,7 @@ class CreateInvoicePageContainer extends Component {
             newState.invoiceItemsInputs[inputId].qtyValue = quantity;
             newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
             newState.totalPrice = this.getTotalPrice(newState);
+            newState.errorMsg.price = '';
             return newState;
           });
         }
@@ -114,20 +123,26 @@ class CreateInvoicePageContainer extends Component {
   }
 
   onSubmit() {
-    const {invoiceItemsInputs, discountInput, totalPrice, customerInput} = this.state
-    this.setState({errorMsg: {}})
-    this.setState( (prewState) => {
-      let newState = Object.assign({}, prewState)
+    const {
+      invoiceItemsInputs, discountInput, totalPrice, customerInput,
+    } = this.state;
+    if(invoiceItemsInputs.length < 1 || !customerInput || totalPrice <= 0){
+      this.setState({ errorMsg: {} });
+      this.setState((prewState) => {
+        const newState = Object.assign({}, prewState);
+        !customerInput && (newState.errorMsg.customerInput = 'please select customer');
+        invoiceItemsInputs.length < 1 && (newState.errorMsg.invoiceItems = 'please select products');
+        totalPrice <= 0 && (newState.errorMsg.price = 'please check quantity');
+        return newState;
+      });
+      return
+    }
 
-      !customerInput && (newState.errorMsg['customerInput'] = 'please select customer');
-      invoiceItemsInputs.length < 1 && (newState.errorMsg['invoiceItems'] = 'please select products');
-      totalPrice > 0 && (newState.errorMsg['price'] = 'please select products');
-      return newState
-    })
+    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice})
+
   }
 
   render() {
-    console.log(this.state)
     const {
       customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, errorMsg,
     } = this.state;
@@ -159,6 +174,8 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
+    deleteInvoice: bindActionCreators(deleteInvoice, dispatch),
+    sendInvoices: bindActionCreators(sendInvoices, dispatch),
   };
 }
 export default connect(
