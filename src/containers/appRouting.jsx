@@ -4,9 +4,9 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Container } from 'reactstrap';
 import history from '../services/history';
-import MainPage from '../components/mainPage';
+import MainPageContainer from './mainPageContainer';
 import CustomersPageContainer from './customersPageContainer';
-import InvoicePage from '../components/invoicePage';
+import InvoicePageContainer from './invoicePageContainer';
 import ProductsPageContainer from './productsPageContainer';
 import CreateInvoicePageContainer from './createInvoicePageContainer';
 import HeaderContainer from './headerContainer';
@@ -20,9 +20,9 @@ class AppRouter extends Component {
         <div>
           <Container>
             <HeaderContainer />
-            <Route exact path="/" component={MainPage} />
+            <Route exact path="/" component={MainPageContainer} />
             <Route path="/customers" component={CustomersPageContainer} />
-            <Route exact path="/invoices" component={InvoicePage} />
+            <Route exact path="/invoices" component={InvoicePageContainer} />
             <Route path="/products" component={ProductsPageContainer} />
             <Route path="/invoices/:id" component={CreateInvoicePageContainer} />
           </Container>

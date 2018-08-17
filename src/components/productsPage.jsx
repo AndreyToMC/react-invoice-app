@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table } from 'reactstrap';
 
 const ProductsPage = ({ products }) => (
-  <Table>
+  <Table hover>
     <thead>
       <tr>
         <th>Product Name</th>

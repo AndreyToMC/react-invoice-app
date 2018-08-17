@@ -167,7 +167,7 @@ class CreateInvoicePageContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    customers: state.customers,
+    customers: state.customers.customersList,
     products: state.products.productsList,
     productsPriceById: state.products.productsPriceById,
   };

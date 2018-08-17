@@ -3,7 +3,7 @@ import { Table } from 'reactstrap';
 
 
 const CustomersPage = ({ customers }) => (
-  <Table>
+  <Table hover>
     <thead>
       <tr>
         <th>Customer Name</th>

@@ -4,7 +4,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-const Header = ({ toNewInvoice }) => (
+const Header = ({ toNewInvoice, invoicesCuont }) => (
   <Nav className="d-flex justify-content-around">
     <NavItem>
         <Link to="/">Logo</Link>
@@ -16,7 +16,7 @@ const Header = ({ toNewInvoice }) => (
         <Link to="/customers">Customers</Link>
     </NavItem>
     <NavItem>
-        <Link to="/invoices">Invoices(2)</Link>
+        <Link to="/invoices">Invoices({invoicesCuont})</Link>
     </NavItem>
     <NavItem>
       <Button onClick={toNewInvoice} color="primary">

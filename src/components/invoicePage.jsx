@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import { Table } from 'reactstrap';
 
-const InvoicePage = () => (
-  <Table>
+const InvoicePage = ({ invoices, customersNames }) => (
+  <Table hover>
     <thead>
       <tr>
         <th>Invoice ID</th>
@@ -13,15 +13,18 @@ const InvoicePage = () => (
         <th>Actions</th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>13</td>
-        <td>55</td>
-        <td> VIEW EDIT DELETE </td>
-      </tr>
-    </tbody>
+    {invoices.length && invoices.map((elem, i) => (
+      <tbody key={i}>
+        <tr>
+          <th scope="row">{elem.id}</th>
+          <td>{customersNames[elem.id]}</td>
+          <td>{elem.discount}%</td>
+          <td>${elem.total}</td>
+          <td> VIEW EDIT DELETE </td>
+        </tr>
+      </tbody>
+    ))
+    }
   </Table>
 );
 

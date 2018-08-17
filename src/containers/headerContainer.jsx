@@ -9,8 +9,9 @@ class HeaderContainer extends Component {
     this.props.push('/invoices/2')
   }
   render() {
+    console.log(this.props)
     return (
-      <Header toNewInvoice={this.toNewInvoice}/>
+      <Header invoicesCuont={this.props.invoicesCuont} toNewInvoice={this.toNewInvoice}/>
     );
   }
 }
@@ -22,7 +23,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    ...state,
+    invoicesCuont: state.invoices.length
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);

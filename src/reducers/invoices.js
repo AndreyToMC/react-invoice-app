@@ -1,4 +1,4 @@
-const invoices = (state = 'asd', action) => {
+const invoices = (state = [], action) => {
   switch (action.type) {
     case 'GET_INVOICES_FULFILLED':
       const invoicesArr = action.payload;

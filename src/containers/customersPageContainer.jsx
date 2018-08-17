@@ -6,6 +6,7 @@ import { getCustomers } from '../actions/customersActions';
 
 class CustomersPageContainer extends Component {
   render() {
+    console.log(this.props)
     return (
       <CustomersPage customers={this.props.customers} />
     );
@@ -13,7 +14,7 @@ class CustomersPageContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  return { customers: state.customers };
+  return { customers: state.customers.customersList };
 }
 function mapDispatchToProps(dispatch) {
   return { getCustomers: bindActionCreators(getCustomers, dispatch) };
