@@ -147,7 +147,7 @@ class CreateInvoicePageContainer extends Component {
       return
     }
     this.setState({isBlocking: false})
-    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, this.redirect)
+    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, invoiceItemsInputs)
 
   }
 
