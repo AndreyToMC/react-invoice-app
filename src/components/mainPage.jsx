@@ -17,7 +17,7 @@ const mainPage = ({ invoices, customersNames }) => (
       <tbody key={i}>
       <tr>
         <th scope="row">{elem.id}</th>
-        <td>{customersNames[elem.id]}</td>
+        <td>{customersNames[elem.customer_id]}</td>
         <td>{elem.discount}%</td>
         <td>${elem.total}</td>
         <td> VIEW </td>

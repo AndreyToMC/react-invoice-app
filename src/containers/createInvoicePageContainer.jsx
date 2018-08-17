@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Prompt } from "react-router-dom";
 import CreateInvoicePage from '../components/create-new-invoice-page/createInvoicePage';
+import { push } from 'react-router-redux';
 import { sendInvoices } from '../actions/invoicesActions';
 import { deleteInvoice } from '../actions/invoicesActions';
 
@@ -9,6 +11,7 @@ class CreateInvoicePageContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isBlocking: false,
       errorMsg: {},
       customerInput: '',
       invoiceItemsInputs: [],
@@ -25,8 +28,12 @@ class CreateInvoicePageContainer extends Component {
     this.getProductPrice = this.getProductPrice.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.redirect = this.redirect.bind(this)
   }
 
+  redirect(){
+    this.props.puhs('/invoices')
+  }
   getTotalPrice(state, discount) {
     const itemsTotalPrice = state.invoiceItemsInputs.reduce((ac, elem) => ac + parseFloat(elem.productPriceTotal), 0);
     if (discount) {
@@ -50,6 +57,7 @@ class CreateInvoicePageContainer extends Component {
           const newState = Object.assign({}, prevState);
           newState.errorMsg.customerInput = '';
           newState.customerInput = customerId;
+          newState.isBlocking = true;
           return newState;
         });
         break;
@@ -62,6 +70,7 @@ class CreateInvoicePageContainer extends Component {
           newState.invoiceItemsInputs.push({ productId, qtyValue, productPriceTotal });
           newState.errorMsg.invoiceItems = '';
           newState.addInput.qtyInput = 0;
+          newState.isBlocking = true;
           newState.totalPrice = this.getTotalPrice(newState);
           return newState;
         });
@@ -137,17 +146,20 @@ class CreateInvoicePageContainer extends Component {
       });
       return
     }
-
-    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice})
+    this.setState({isBlocking: false})
+    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, this.redirect)
 
   }
 
   render() {
+    console.log(this.state)
     const {
-      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, errorMsg,
+      isBlocking, customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, errorMsg,
     } = this.state;
     return (
+      <div>
       <CreateInvoicePage
+        invoicesId={this.props.invoiceId}
         onSubmit={this.onSubmit}
         onAddInputsChange={this.onAddInputsChange}
         onItemListInputChange={this.onItemListInputChange}
@@ -161,6 +173,10 @@ class CreateInvoicePageContainer extends Component {
         totalPrice={totalPrice}
         errors={errorMsg}
       />
+        <Prompt when={isBlocking} message={location =>
+          `Are you sure you want to go to ${location.pathname}`
+        }/>
+      </div>
     );
   }
 }
@@ -170,12 +186,14 @@ function mapStateToProps(state) {
     customers: state.customers.customersList,
     products: state.products.productsList,
     productsPriceById: state.products.productsPriceById,
+    invoiceId: state.invoices.length +1
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
     deleteInvoice: bindActionCreators(deleteInvoice, dispatch),
     sendInvoices: bindActionCreators(sendInvoices, dispatch),
+    push: bindActionCreators(push, dispatch),
   };
 }
 export default connect(

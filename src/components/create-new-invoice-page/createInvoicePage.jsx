@@ -21,12 +21,13 @@ class CreateInvoicePage extends Component {
       discountInput,
       totalPrice,
       errors,
+      invoicesId
     } = this.props;
     return (
       <Container>
         <Row>
           <Col>
-            <Row>Invoice #1</Row>
+            <Row>Invoice #{invoicesId}</Row>
             <Container>
               <DropBox selected={customerInputValue} onChange={onAddInputsChange} values={customers} placeholder="Select Name" name="customerInput" key="customerInput" />
               <Row  className='text-danger'>{errors.customerInput&&errors.customerInput}</Row>

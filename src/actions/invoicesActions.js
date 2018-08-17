@@ -1,5 +1,8 @@
 import { apiURL } from '../services/apiURL';
+import { push } from 'react-router-redux'
 import axios from 'axios'
+
+
 export const getInvoices   = () => ({
   type: 'GET_INVOICES',
   payload: axios.get(apiURL + '/api/invoices').then(res => res.data)
@@ -7,8 +10,16 @@ export const getInvoices   = () => ({
 
 export const sendInvoices = (data) => {
   return (dispatch) => {
-      axios.post(apiURL + '/api/invoices', {...data}).then( res => console.log(res))
-  };
+    const response = dispatch({
+      type: 'SEND_INVOICES',
+      payload: axios.post(apiURL + '/api/invoices', {...data}),
+    })
+
+    response.then((data) => {
+      const invoiceId = data.value.data.id
+      dispatch(push(`/invoices/${invoiceId}`))
+    })
+  }
 }
 
 export const changeInvoice = (id, data) => {
