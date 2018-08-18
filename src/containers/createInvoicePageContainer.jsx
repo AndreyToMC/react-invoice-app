@@ -28,12 +28,8 @@ class EditInvoicePageContainer extends Component {
     this.getProductPrice = this.getProductPrice.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.redirect = this.redirect.bind(this)
   }
 
-  redirect(){
-    this.props.puhs('/invoices')
-  }
   getTotalPrice(state, discount) {
     const itemsTotalPrice = state.invoiceItemsInputs.reduce((ac, elem) => ac + parseFloat(elem.productPriceTotal), 0);
     if (discount) {
@@ -147,7 +143,7 @@ class EditInvoicePageContainer extends Component {
       return
     }
     this.setState({isBlocking: false})
-    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, this.redirect)
+    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, invoiceItemsInputs)
 
   }
 

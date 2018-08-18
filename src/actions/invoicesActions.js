@@ -16,8 +16,8 @@ export const sendInvoices = (data, itemsArr) => (dispatch) => {
   response.then((data) => {
     const invoiceId = data.value.data.id;
     return Promise.all(itemsArr.map(elem => axios.post(`${apiURL}/api/invoices/${invoiceId}/items`, { product_id: elem.productId, quantity: elem.qtyValue }))).then(data => invoiceId);
-  }).then((invoiceId) => {
-    dispatch(push(`/invoices/${invoiceId}`));
+  }).then(() => {
+    dispatch(push(`/invoices/`));
   });
 };
 
