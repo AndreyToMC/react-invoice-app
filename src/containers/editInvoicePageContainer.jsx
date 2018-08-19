@@ -26,6 +26,7 @@ class CreateInvoicePageContainer extends Component {
     this.onItemListInputChange = this.onItemListInputChange.bind(this);
     this.getProductPrice = this.getProductPrice.bind(this);
     this.getTotalPrice = this.getTotalPrice.bind(this);
+    // this.setNewTotal = this.getTotalPrice.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +34,30 @@ class CreateInvoicePageContainer extends Component {
     this.props.getInvoiceById(invoiceId);
     this.props.getInvoicesItems(invoiceId);
     this.setState({ invoiceId });
+  }
+
+  setNewTotal = (invoiceId, item, data, newItem) => {
+    let newInvoiceItemsList = []
+    if(item){
+      this.props.invoiceItems.forEach( (elem) => {
+        if(elem.id === item.id) {
+          let newElem = Object.assign({}, item)
+          newElem.product_id = data.productId;
+          newElem.quantity = data.quantity
+          newInvoiceItemsList.push(newElem)
+        } else newInvoiceItemsList.push(elem)
+      })
+    }
+
+    if(newItem){
+      newInvoiceItemsList = newInvoiceItemsList.concat(this.props.invoiceItems)
+      newInvoiceItemsList.push(newItem)
+      console.log(newInvoiceItemsList)
+    }
+    const totalPrice = this.getTotalPrice(newInvoiceItemsList, this.props.currentInvoice.discount)
+    let newInvoice = Object.assign( {}, this.props.currentInvoice)
+    newInvoice.total = totalPrice
+    this.props.changeInvoice(invoiceId, newInvoice)
   }
 
   getTotalPrice(products, discount) {
@@ -51,12 +76,15 @@ class CreateInvoicePageContainer extends Component {
     switch (e.target.name) {
       case 'customerInput':
         const customerId = e.target.value;
-
+            let newInvoice = Object.assign( {}, this.props.currentInvoice)
+            newInvoice.customer_id = customerId
+        this.props.changeInvoice(invoiceId, newInvoice)
         break;
       case 'productInput':
         const product_id = e.target.value;
         const quantityInp = this.state.addInput.qtyInput;
         this.props.addInvoicesItems(invoiceId, {product_id, quantity: quantityInp})
+        this.setNewTotal(invoiceId, null, null, {product_id, quantity: quantityInp})
         this.setState((prevState) => {
           const newState = Object.assign({}, prevState);
           newState.addInput.qtyInput = 0;
@@ -80,28 +108,22 @@ class CreateInvoicePageContainer extends Component {
   onItemListInputChange(e) {
     const inputId = parseInt(e.target.id);
     const invoiceId = this.state.invoiceId;
+
     const item = this.props.invoiceItems.filter(elem => elem.id===inputId).shift()
-    console.log(inputId)
     switch (e.target.name) {
       case 'listItemProductInput':
         const product_id = parseInt(e.target.value);
         const itemQty = item.quantity
         this.props.changeInvoicesItem(invoiceId, {product_id, quantity: itemQty}, inputId)
-
+        this.setNewTotal(invoiceId, item, {productId: product_id, quantity: itemQty})
         break;
       case 'listItemQtyInput':
         const quantity = e.target.value;
         const productId = item.product_id
         this.props.changeInvoicesItem(invoiceId, {product_id: productId, quantity}, inputId)
+        this.setNewTotal(invoiceId, item, {productId, quantity})
         break;
       default:
-    }
-    // FIXME: add new product and run
-    const setNewTotal = () => {
-      const totalPrice = this.getTotalPrice(this.props.invoiceItems, this.props.currentInvoice.discount)
-      let newInvoice = Object.assign( {}, this.props.currentInvoice)
-      newInvoice.total = totalPrice
-      this.props.changeInvoice(invoiceId, newInvoice)
     }
   }
 
