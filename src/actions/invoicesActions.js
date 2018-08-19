@@ -7,6 +7,10 @@ export const getInvoices = () => ({
   type: 'GET_INVOICES',
   payload: axios.get(`${apiURL}/api/invoices`).then(res => res.data),
 });
+export const getInvoiceById = (id) => ({
+  type: 'GET_INVOICE_BY_ID',
+  payload: axios.get(`${apiURL}/api/invoices/${id}`).then(res => res.data),
+});
 
 export const sendInvoices = (data, itemsArr) => (dispatch) => {
   const response = dispatch({
@@ -21,8 +25,12 @@ export const sendInvoices = (data, itemsArr) => (dispatch) => {
   });
 };
 
-export const changeInvoice = (id, data) => (dispatch) => {
-  axios.put(`${apiURL}/api/invoices/${id}`, { customer_id: 3, discount: 10, total: 150 }).then(res => console.log(res));
+export const changeInvoice = (id, data) => ({
+  type: 'CHANGE_INVOICE',
+  payload: axios.put(`${apiURL}/api/invoices/${id}`, {...data}).then(res => res.data),
+});
+{
+
 };
 
 export const deleteInvoice = id => (dispatch) => {

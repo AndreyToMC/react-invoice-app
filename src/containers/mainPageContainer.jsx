@@ -18,7 +18,7 @@ class MainPageContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  return { invoices: state.invoices, customersNameById: state.customers.customersNameById };
+  return { invoices: state.invoices.invoicesList, customersNameById: state.customers.customersNameById };
 }
 function mapDispatchToProps(dispatch) {
   return {

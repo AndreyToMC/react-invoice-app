@@ -182,7 +182,7 @@ function mapStateToProps(state) {
     customers: state.customers.customersList,
     products: state.products.productsList,
     productsPriceById: state.products.productsPriceById,
-    invoiceId: state.invoices.length +1
+    invoiceId: state.invoices.invoicesList.length +1
   };
 }
 function mapDispatchToProps(dispatch) {

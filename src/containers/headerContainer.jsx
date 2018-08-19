@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    invoicesCuont: state.invoices.length
+    invoicesCuont: state.invoices.invoicesList.length
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderContainer);
