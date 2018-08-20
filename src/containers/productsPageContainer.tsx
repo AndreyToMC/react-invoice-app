@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import ProductsPage from '../components/productsPage';
 import { getProducts } from '../actions/productsActions';
 
-class ProductsPageContainer extends Component {
+import ProductsPage from '../components/productsPage';
+
+interface IProductsPageContainer {
+  products: [],
+
+}
+class ProductsPageContainer extends React.Component<IProductsPageContainer> {
   render() {
     return (
       <ProductsPage products={this.props.products} />
@@ -15,10 +19,6 @@ class ProductsPageContainer extends Component {
 function mapStateToProps(state) {
   return { products: state.products.productsList };
 }
-function mapDispatchToProps(dispatch) {
-  return { getProducts: bindActionCreators(getProducts, dispatch) };
-}
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
 )(ProductsPageContainer);

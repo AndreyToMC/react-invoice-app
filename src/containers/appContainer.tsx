@@ -1,16 +1,20 @@
-
-import React, { Component } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import AppRouter from './appRouting';
 import { getCustomers } from '../actions/customersActions';
-import { getProducts } from '../actions/productsActions';
 import { getInvoices } from '../actions/invoicesActions';
+import { getProducts } from '../actions/productsActions';
 
+import AppRouter from './appRouting';
 
+interface IAppContainer {
+  getCustomers: () => void,
+  getProducts: () => void,
+  getInvoices: () => void,
+}
 
-class AppContainer extends Component {
+class AppContainer extends React.Component<IAppContainer> {
   componentDidMount() {
     this.props.getCustomers();
     this.props.getProducts();

@@ -1,13 +1,55 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { changeInvoice, getInvoiceById  } from '../actions/invoicesActions';
+import { addInvoicesItems, changeInvoicesItem,  getInvoicesItems  } from '../actions/invoicesItemsActions';
 import EditInvoicePage from '../components/edit-invoice-page/editInvoicePage';
-import { getInvoicesItems, changeInvoicesItem, addInvoicesItems } from '../actions/invoicesItemsActions';
-import { getInvoiceById, changeInvoice } from '../actions/invoicesActions';
 
+interface IEditInvoicePageProps {
+  match: {
+    params: {
+      id: number,
+    },
+  },
+  productsPriceById: {},
+  customers: [],
+  products: [],
+  getInvoiceById: (invoiceId: number) => void,
+  getInvoicesItems: (invoiceId: number) => void,
+  changeInvoice: (invoiceId: number, newInvoice: Iinvoice) => void,
+  invoiceItems: [],
+  currentInvoice: Iinvoice,
+  addInvoicesItems: (invoiceId: number, data: InvoiceItem) => void,
+  changeInvoicesItem: (invoiceId: number, data: InvoiceItem, itemId: number) => void,
+}
 
+interface IEditInvoicePageState {
+  customerInput: string,
+  invoiceItemsInputs: [],
+  addInput: {
+    productInput: string,
+    qtyInput: number,
+    priceValue: number,
+  },
+  totalPrice: number,
+  discountInput: number,
+  invoiceId: number,
+}
 
-class CreateInvoicePageContainer extends Component {
+interface Iinvoice {
+  id: number,
+  customer_id: number,
+  discount: number,
+  total: string,
+}
+
+interface InvoiceItem {
+  id?: number,
+  quantity: number,
+  product_id: number,
+}
+
+class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IEditInvoicePageState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,31 +79,31 @@ class CreateInvoicePageContainer extends Component {
   }
 
   setNewTotal = (invoiceId, item, data, newItem) => {
-    let newInvoiceItemsList = []
-    if(item){
-      this.props.invoiceItems.forEach( (elem) => {
-        if(elem.id === item.id) {
-          let newElem = Object.assign({}, item)
+    let newInvoiceItemsList = [];
+    if (item) {
+      this.props.invoiceItems.forEach((elem: Iinvoice) => {
+        if (elem.id === item.id) {
+          const newElem = {...item}
           newElem.product_id = data.productId;
           newElem.quantity = data.quantity
           newInvoiceItemsList.push(newElem)
-        } else newInvoiceItemsList.push(elem)
+        } else {newInvoiceItemsList.push(elem)}
       })
     }
 
-    if(newItem){
-      newInvoiceItemsList = newInvoiceItemsList.concat(this.props.invoiceItems)
+    if (newItem) {
+      newInvoiceItemsList = [...this.props.invoiceItems]
       newInvoiceItemsList.push(newItem)
       console.log(newInvoiceItemsList)
     }
     const totalPrice = this.getTotalPrice(newInvoiceItemsList, this.props.currentInvoice.discount)
-    let newInvoice = Object.assign( {}, this.props.currentInvoice)
+    const newInvoice: Iinvoice = {...this.props.currentInvoice}
     newInvoice.total = totalPrice
     this.props.changeInvoice(invoiceId, newInvoice)
   }
 
   getTotalPrice(products, discount) {
-    const itemsTotalPrice = products.reduce((ac, elem) => ac + parseFloat(this.getProductPrice(elem.product_id, elem.quantity)), 0);
+    const itemsTotalPrice = products.reduce((ac, elem) => ac + this.getProductPrice(elem.product_id, elem.quantity), 0);
     const itemsTotalPriceWithDiscount = itemsTotalPrice - (itemsTotalPrice * discount / 100);
     return itemsTotalPriceWithDiscount.toFixed(2);
   }
@@ -72,21 +114,21 @@ class CreateInvoicePageContainer extends Component {
   }
 
   onAddInputsChange(e) {
-  const invoiceId = this.state.invoiceId;
+    const invoiceId = this.state.invoiceId;
     switch (e.target.name) {
       case 'customerInput':
         const customerId = e.target.value;
-            let newInvoice = Object.assign( {}, this.props.currentInvoice)
-            newInvoice.customer_id = customerId
+        const newInvoice = {...this.props.currentInvoice}
+        newInvoice.customer_id = customerId
         this.props.changeInvoice(invoiceId, newInvoice)
         break;
       case 'productInput':
-        const product_id = e.target.value;
+        const product_id = parseInt(e.target.value, 10);
         const quantityInp = this.state.addInput.qtyInput;
         this.props.addInvoicesItems(invoiceId, {product_id, quantity: quantityInp})
         this.setNewTotal(invoiceId, null, null, {product_id, quantity: quantityInp})
         this.setState((prevState) => {
-          const newState = Object.assign({}, prevState);
+          const newState = {...prevState};
           newState.addInput.qtyInput = 0;
           return newState;
         });
@@ -95,7 +137,7 @@ class CreateInvoicePageContainer extends Component {
         const quantity = e.target.value;
         if (quantity >= 0) {
           this.setState((prevState) => {
-            const newState = Object.assign({}, prevState);
+            const newState = {...prevState};
             newState.addInput.qtyInput = quantity;
             return newState;
           });
@@ -106,22 +148,22 @@ class CreateInvoicePageContainer extends Component {
   }
 
   onItemListInputChange(e) {
-    const inputId = parseInt(e.target.id);
+    const inputId = parseInt(e.target.id, 10);
     const invoiceId = this.state.invoiceId;
 
-    const item = this.props.invoiceItems.filter(elem => elem.id===inputId).shift()
+    const item: InvoiceItem = this.props.invoiceItems.filter((elem: InvoiceItem) => inputId === elem.id).shift()
     switch (e.target.name) {
       case 'listItemProductInput':
-        const product_id = parseInt(e.target.value);
+        const product_id = parseInt(e.target.value, 10);
         const itemQty = item.quantity
         this.props.changeInvoicesItem(invoiceId, {product_id, quantity: itemQty}, inputId)
-        this.setNewTotal(invoiceId, item, {productId: product_id, quantity: itemQty})
+        this.setNewTotal(invoiceId, item, {productId: product_id, quantity: itemQty}, null)
         break;
       case 'listItemQtyInput':
         const quantity = e.target.value;
         const productId = item.product_id
         this.props.changeInvoicesItem(invoiceId, {product_id: productId, quantity}, inputId)
-        this.setNewTotal(invoiceId, item, {productId, quantity})
+        this.setNewTotal(invoiceId, item, {productId, quantity}, null)
         break;
       default:
     }
@@ -129,15 +171,14 @@ class CreateInvoicePageContainer extends Component {
 
   render() {
     const {
-      customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, invoiceId,
+      addInput,
     } = this.state;
     const {
-      invoiceItems, customers, products, currentInvoice
+      invoiceItems, customers, products, currentInvoice,
     } = this.props;
     return (
       <EditInvoicePage
         invoicesId={currentInvoice.id}
-        onSubmit={this.onSubmit}
         onAddInputsChange={this.onAddInputsChange}
         onItemListInputChange={this.onItemListInputChange}
         customers={customers}
@@ -176,4 +217,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CreateInvoicePageContainer);
+)(EditInvoicePageContainer);

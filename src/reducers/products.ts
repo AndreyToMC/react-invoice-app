@@ -1,14 +1,14 @@
 const products = (state = { productsList: [], productsPriceById: {} }, action) => {
   switch (action.type) {
     case 'GET_PRODUCTS_FULFILLED':
-      const products = action.payload;
+      const productsArr = action.payload;
       const productsPriceById = {};
-      products.forEach((elem) => {
+      productsArr.forEach((elem) => {
         const id = elem.id;
         const price = elem.price;
         productsPriceById[id] = price;
       });
-      return { productsList: products, productsPriceById };
+      return { productsList: productsArr, productsPriceById };
     default:
       return state;
   }

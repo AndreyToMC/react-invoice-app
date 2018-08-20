@@ -1,10 +1,10 @@
-import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
-import customers from './customers';
-import invoices from './invoices';
-import invoiceItems from './invoiceItems';
-import products from './products';
 
+import { routerReducer } from 'react-router-redux';
+import { combineReducers } from 'redux';
+import customers from './customers';
+import invoiceItems from './invoiceItems';
+import invoices from './invoices';
+import products from './products';
 
 export default combineReducers({
   customers,

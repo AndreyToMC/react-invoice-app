@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import MainPage from "../components/mainPage";
 import { push } from 'react-router-redux';
+import { bindActionCreators } from 'redux';
 
+import MainPage from '../components/mainPage';
 
-class MainPageContainer extends Component {
+interface IMainPageContainer {
+  push: (url: string) => void,
+  invoices: [],
+  customersNameById: [],
+}
+class MainPageContainer extends React.Component<IMainPageContainer> {
   toInvoice = (e) => {
     const invoiceId = e.target.parentNode.id
     this.props.push(`/invoices/${invoiceId}`)
@@ -22,7 +28,7 @@ function mapStateToProps(state) {
 }
 function mapDispatchToProps(dispatch) {
   return {
-    push:bindActionCreators(push, dispatch)
+    push: bindActionCreators(push, dispatch),
   }
 }
 export default connect(

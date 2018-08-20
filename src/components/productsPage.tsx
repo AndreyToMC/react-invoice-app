@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Table } from 'reactstrap';
 
 const ProductsPage = ({ products }) => (
-  <Table hover>
+  <Table hover={true}>
     <thead>
       <tr>
         <th>Product Name</th>
@@ -10,7 +10,7 @@ const ProductsPage = ({ products }) => (
       </tr>
     </thead>
     <tbody>
-      {products.map(elem => (
+      {products.map((elem) => (
         <tr>
           <td>{elem.name}</td>
           <td>{elem.price}</td>

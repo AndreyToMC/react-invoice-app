@@ -1,9 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { Table } from 'reactstrap';
 
-
 const CustomersPage = ({ customers }) => (
-  <Table hover>
+  <Table hover={true}>
     <thead>
       <tr>
         <th>Customer Name</th>
@@ -12,7 +11,7 @@ const CustomersPage = ({ customers }) => (
       </tr>
     </thead>
     <tbody>
-      {customers.map(elem => (
+      {customers.map((elem) => (
         <tr>
           <td>{elem.name}</td>
           <td>{elem.address}</td>
@@ -28,4 +27,5 @@ const CustomersPage = ({ customers }) => (
     </tbody>
   </Table>
 );
+
 export default CustomersPage;
