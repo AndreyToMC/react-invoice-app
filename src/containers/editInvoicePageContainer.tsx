@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { changeInvoice, getInvoiceById  } from '../actions/invoicesActions';
 import { addInvoicesItems, changeInvoicesItem,  getInvoicesItems  } from '../actions/invoicesItemsActions';
-import EditInvoicePage from '../components/edit-invoice-page/editInvoicePage';
+import EditInvoicePage from '../components/invoiceActionsPage/pageLayout';
 
 interface IEditInvoicePageProps {
   match: {
@@ -147,11 +147,10 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     }
   }
 
-  onItemListInputChange(e) {
-    const inputId = parseInt(e.target.id, 10);
+  onItemListInputChange(e, inputId) {
     const invoiceId = this.state.invoiceId;
 
-    const item: InvoiceItem = this.props.invoiceItems.filter((elem: InvoiceItem) => inputId === elem.id).shift()
+    const item: InvoiceItem = this.props.invoiceItems.filter((elem: InvoiceItem) => inputId === elem.id).shift();
     switch (e.target.name) {
       case 'listItemProductInput':
         const product_id = parseInt(e.target.value, 10);
@@ -178,7 +177,7 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     } = this.props;
     return (
       <EditInvoicePage
-        invoicesId={currentInvoice.id}
+        invoiceId={currentInvoice.id}
         onAddInputsChange={this.onAddInputsChange}
         onItemListInputChange={this.onItemListInputChange}
         customers={customers}
