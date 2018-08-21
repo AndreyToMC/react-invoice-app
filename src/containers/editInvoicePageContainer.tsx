@@ -160,6 +160,9 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
         break;
       case 'listItemQtyInput':
         const quantity = e.target.value;
+        if (quantity < 0) {
+          return
+        }
         const productId = item.product_id
         this.props.changeInvoicesItem(invoiceId, {product_id: productId, quantity}, inputId)
         this.setNewTotal(invoiceId, item, {productId, quantity}, null)
@@ -175,6 +178,7 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     const {
       invoiceItems, customers, products, currentInvoice,
     } = this.props;
+    console.log(invoiceItems)
     return (
       <EditInvoicePage
         invoiceId={currentInvoice.id}
@@ -189,6 +193,7 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
         discountInput={currentInvoice.discount}
         totalPrice={currentInvoice.total}
         getProductPrice={this.getProductPrice}
+        disableDiscountInput={true}
       />
     );
   }

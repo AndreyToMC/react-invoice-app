@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import Button from '@material-ui/core/Button/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { createStyles, withStyles } from '@material-ui/core/styles';
@@ -11,6 +12,9 @@ import Select from './selects'
 const styles = (theme) => createStyles({
   root: {
     flexGrow: 1,
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
   paper: {
     padding: theme.spacing.unit * 2,
@@ -43,6 +47,10 @@ function PageLayout(props) {
     qtyInputValue,
     totalPrice,
     discountInput,
+    disableDiscountInput,
+    onSubmit,
+    errors,
+    submitButton,
   } = props;
   return (
     <div className={classes.root}>
@@ -63,10 +71,19 @@ function PageLayout(props) {
                       selected={customerInputValue}
                       onChange={onAddInputsChange}
                       label='Customer'
+                      errorMsg={errors && errors.customerInput}
                     />
                   </Grid>
+                  <Grid item xs={6}>
+                    Products
+                  </Grid>
+                  <Grid item xs={3}>
+                    Qantity
+                  </Grid>
+                  <Grid item xs={3}>
+                    Price
+                  </Grid>
                   {invoiceItemsInputs && invoiceItemsInputs.map((elem, i) => {
-                    console.log(elem)
                     return(
                       <React.Fragment key={i}>
                         <Grid item xs={6}>
@@ -86,9 +103,9 @@ function PageLayout(props) {
                             onChange={onItemListInputChange}
                             value={elem.quantity}
                             label='Quantity'
+                            errorMsg={errors && errors.price}
                           />
                         </Grid>
-                        {console.log(elem)}
                         <Grid item xs={3} className={classes.centered}>
                           <p>${getProductPrice(elem.product_id, elem.quantity) || '0.00'}</p>
                         </Grid>
@@ -103,6 +120,7 @@ function PageLayout(props) {
                       selected={productInputValue}
                       id='inputAddProduct'
                       placeholder='Add Product'
+                      errorMsg={errors && errors.invoiceItems}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -134,10 +152,15 @@ function PageLayout(props) {
                     Discount
                   </Typography>
                   <Grid item xs={12}>
-                    <NumberInput  value={discountInput} disabled={true}/>
+                    <NumberInput  name='discountInput' value={discountInput} disabled={disableDiscountInput} onChange={onAddInputsChange}/>
                   </Grid>
                 </div>
               </Grid>
+              {submitButton && <Grid item xs={12}>
+                <Button onClick={onSubmit} variant='outlined' color='primary' className={classes.button}>
+                  Send Invoice
+                </Button>
+              </Grid>}
             </Grid>
           </Grid>
         </Grid>

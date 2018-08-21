@@ -1,18 +1,62 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Prompt } from "react-router-dom";
-import CreateInvoicePage from '../components/create-new-invoice-page/createInvoicePage';
+import { Prompt } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import { sendInvoices } from '../actions/invoicesActions';
-import { deleteInvoice } from '../actions/invoicesActions';
+import { bindActionCreators } from 'redux';
 
-class EditInvoicePageContainer extends Component {
+import { sendInvoices } from '../actions/invoicesActions';
+import CreateInvoicePage from '../components/invoiceActionsPage/pageLayout';
+
+interface ICreateInvoicePageProps {
+  invoiceId: number,
+  productsPriceById: {},
+  customers: [],
+  products: [],
+  currentInvoice: Iinvoice,
+  sendInvoices: (data: Iinvoice, invoiceItemsInputs: any[]) => void,
+}
+
+interface ICreateInvoicePageState {
+  isBlocking: boolean,
+  errorMsg: {
+    invoiceItems: string,
+    customerInput: string,
+    price: string,
+  },
+  customerInput: string,
+  invoiceItemsInputs: any[],
+  addInput: {
+    productInput: string,
+    qtyInput: number,
+    priceValue: number,
+  },
+  totalPrice: string,
+  discountInput: number,
+}
+
+interface Iinvoice {
+  id?: number,
+  customer_id: number,
+  discount: number,
+  total: string,
+}
+
+interface InvoiceItem {
+  id?: number,
+  quantity: number,
+  product_id: number,
+}
+
+class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps, ICreateInvoicePageState> {
   constructor(props) {
     super(props);
     this.state = {
       isBlocking: false,
-      errorMsg: {},
+      errorMsg: {
+        invoiceItems: '',
+        customerInput: '',
+        price: '',
+      },
       customerInput: '',
       invoiceItemsInputs: [],
       addInput: {
@@ -20,7 +64,7 @@ class EditInvoicePageContainer extends Component {
         qtyInput: 0,
         priceValue: 0,
       },
-      totalPrice: 0,
+      totalPrice: '0.00',
       discountInput: 0,
     };
     this.onAddInputsChange = this.onAddInputsChange.bind(this);
@@ -50,7 +94,7 @@ class EditInvoicePageContainer extends Component {
       case 'customerInput':
         const customerId = e.target.value;
         this.setState((prevState) => {
-          const newState = Object.assign({}, prevState);
+          const newState = {...prevState};
           newState.errorMsg.customerInput = '';
           newState.customerInput = customerId;
           newState.isBlocking = true;
@@ -60,14 +104,15 @@ class EditInvoicePageContainer extends Component {
       case 'productInput':
         const productId = e.target.value;
         this.setState((prevState) => {
-          const newState = Object.assign({}, prevState);
+          const newState = {...prevState};
           const qtyValue = prevState.addInput.qtyInput;
           const productPriceTotal = this.getProductPrice(productId, qtyValue);
-          newState.invoiceItemsInputs.push({ productId, qtyValue, productPriceTotal });
+          const productInputId = prevState.invoiceItemsInputs.length
+          newState.invoiceItemsInputs.push({ id: productInputId, product_id: productId, quantity: qtyValue, productPriceTotal });
           newState.errorMsg.invoiceItems = '';
           newState.addInput.qtyInput = 0;
           newState.isBlocking = true;
-          newState.totalPrice = this.getTotalPrice(newState);
+          newState.totalPrice = this.getTotalPrice(newState, null);
           return newState;
         });
         break;
@@ -75,9 +120,9 @@ class EditInvoicePageContainer extends Component {
         const quantity = e.target.value;
         if (quantity >= 0) {
           this.setState((prevState) => {
-            const newState = Object.assign({}, prevState);
+            const newState = {...prevState};
             newState.addInput.qtyInput = quantity;
-            newState.totalPrice = this.getTotalPrice(newState);
+            newState.totalPrice = this.getTotalPrice(newState, null);
             return newState;
           });
         }
@@ -93,31 +138,34 @@ class EditInvoicePageContainer extends Component {
     }
   }
 
-  onItemListInputChange(e) {
-    const inputId = e.target.id;
+  onItemListInputChange(e, inputId) {
+    console.log(this.state)
+    console.log(e.target.value, inputId)
     switch (e.target.name) {
       case 'listItemProductInput':
-        const productId = e.target.value;
+        const newProductId = e.target.value;
         this.setState((prevState) => {
-          const newState = Object.assign({}, prevState);
-          const quantity = newState.invoiceItemsInputs[inputId].qtyValue;
-          const productPrice = this.getProductPrice(productId, quantity);
-          newState.invoiceItemsInputs[inputId].productId = productId;
+          const newState = {...prevState};
+          const quantity = newState.invoiceItemsInputs[inputId].quantity;
+          const productPrice = this.getProductPrice(newProductId, quantity);
+          newState.invoiceItemsInputs[inputId].product_id = newProductId;
           newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
-          newState.totalPrice = this.getTotalPrice(newState);
+          console.log(newState.invoiceItemsInputs)
+          newState.totalPrice = this.getTotalPrice(newState, null);
           return newState;
         });
         break;
       case 'listItemQtyInput':
-        const quantity = e.target.value;
-        if (quantity >= 0) {
+        const newQuantity = e.target.value;
+        if (newQuantity >= 0) {
+          console.log(e.target, inputId)
           this.setState((prevState) => {
-            const newState = Object.assign({}, prevState);
-            const productId = newState.invoiceItemsInputs[inputId].productId;
-            const productPrice = this.getProductPrice(productId, quantity);
-            newState.invoiceItemsInputs[inputId].qtyValue = quantity;
+            const newState = {...prevState};
+            const productId = newState.invoiceItemsInputs[inputId].product_id;
+            const productPrice = this.getProductPrice(productId, newQuantity);
+            newState.invoiceItemsInputs[inputId].quantity = newQuantity;
             newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
-            newState.totalPrice = this.getTotalPrice(newState);
+            newState.totalPrice = this.getTotalPrice(newState, null);
             newState.errorMsg.price = '';
             return newState;
           });
@@ -131,32 +179,45 @@ class EditInvoicePageContainer extends Component {
     const {
       invoiceItemsInputs, discountInput, totalPrice, customerInput,
     } = this.state;
-    if(invoiceItemsInputs.length < 1 || !customerInput || totalPrice <= 0){
-      this.setState({ errorMsg: {} });
+    if (invoiceItemsInputs.length < 1 || !customerInput || parseInt(totalPrice, 10) <= 0) {
+      this.setState({
+        errorMsg: {
+          invoiceItems: '',
+          customerInput: '',
+          price: '',
+        },
+      });
       this.setState((prewState) => {
-        const newState = Object.assign({}, prewState);
-        !customerInput && (newState.errorMsg.customerInput = 'please select customer');
-        invoiceItemsInputs.length < 1 && (newState.errorMsg.invoiceItems = 'please select products');
-        totalPrice <= 0 && (newState.errorMsg.price = 'please check quantity');
+        const newState = {...prewState};
+        if (!customerInput) {
+          newState.errorMsg.customerInput = 'please select customer'
+        }
+        if (invoiceItemsInputs.length < 1) {
+          newState.errorMsg.invoiceItems = 'please select products'
+        }
+        if (parseInt(totalPrice, 10) <= 0) {
+          newState.errorMsg.price = 'please check quantity'
+        }
         return newState;
       });
       return
     }
     this.setState({isBlocking: false})
-    this.props.sendInvoices({customer_id: customerInput, discount: discountInput, total: totalPrice}, invoiceItemsInputs)
+    const customer_id = parseInt(customerInput, 10)
+    this.props.sendInvoices({customer_id, discount: discountInput, total: totalPrice}, invoiceItemsInputs)
 
   }
 
+  redirect = (location) => `Are you sure you want to go to ${location.pathname}`
+
   render() {
-    console.log(this.state)
     const {
       isBlocking, customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, errorMsg,
     } = this.state;
     return (
       <div>
         <CreateInvoicePage
-          invoicesId={this.props.invoiceId}
-          onSubmit={this.onSubmit}
+          invoiceId={this.props.invoiceId}
           onAddInputsChange={this.onAddInputsChange}
           onItemListInputChange={this.onItemListInputChange}
           customers={this.props.customers}
@@ -167,11 +228,12 @@ class EditInvoicePageContainer extends Component {
           invoiceItemsInputs={invoiceItemsInputs}
           discountInput={discountInput}
           totalPrice={totalPrice}
+          getProductPrice={this.getProductPrice}
           errors={errorMsg}
+          onSubmit={this.onSubmit}
+          submitButton={true}
         />
-        <Prompt when={isBlocking} message={location =>
-          `Are you sure you want to go to ${location.pathname}`
-        }/>
+        <Prompt when={isBlocking} message={this.redirect} />
       </div>
     );
   }
@@ -182,12 +244,11 @@ function mapStateToProps(state) {
     customers: state.customers.customersList,
     products: state.products.productsList,
     productsPriceById: state.products.productsPriceById,
-    invoiceId: state.invoices.invoicesList.length +1
+    invoiceId: state.invoices.invoicesList.length + 1,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
-    deleteInvoice: bindActionCreators(deleteInvoice, dispatch),
     sendInvoices: bindActionCreators(sendInvoices, dispatch),
     push: bindActionCreators(push, dispatch),
   };
@@ -195,4 +256,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EditInvoicePageContainer);
+)(CrateInvoicePageContainer);

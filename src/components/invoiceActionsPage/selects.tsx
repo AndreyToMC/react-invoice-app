@@ -24,7 +24,7 @@ const styles = (theme) => createStyles({
 });
 
 function MySelect(props) {
-  const { classes, name, values, selected, onChange, placeholder, id, label } = props;
+  const { classes, name, values, selected, onChange, placeholder, id, label, errorMsg } = props;
   const changeSelect = (e) => {
     onChange(e, id)
   }
@@ -33,6 +33,7 @@ function MySelect(props) {
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor={id} >{label}</InputLabel>
         <Select
+          error={errorMsg && errorMsg.length > 0}
           value={selected || ''}
           onChange={changeSelect}
           displayEmpty
@@ -46,7 +47,7 @@ function MySelect(props) {
             return (<MenuItem key={elem.id} value={elem.id}>{elem.name}</MenuItem>)
           })}
         </Select>
-        <FormHelperText>Auto width</FormHelperText>
+        <FormHelperText error={errorMsg && errorMsg.length > 0} >{errorMsg}</FormHelperText>
       </FormControl>
     </div>
   );

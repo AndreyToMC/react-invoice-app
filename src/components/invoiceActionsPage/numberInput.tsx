@@ -24,7 +24,7 @@ const styles = (theme) => createStyles({
 });
 
 function NumberInput(props) {
-  const { classes, value, onChange, name, id, label, disabled } = props;
+  const { classes, value, onChange, name, id, label, disabled, errorMsg } = props;
   const onInputChange = (e) => {
     onChange(e, id)
   }
@@ -32,8 +32,16 @@ function NumberInput(props) {
     <form className={classes.root}>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor='names'>{label}</InputLabel>
-        <Input disabled={disabled} type='number' name={name} id={id} onChange={onInputChange} value={value}/>
-        <FormHelperText>Auto width</FormHelperText>
+        <Input
+          error={errorMsg && errorMsg.length > 0}
+          disabled={disabled}
+          type='number'
+          name={name}
+          id={id}
+          onChange={onInputChange}
+          value={value}
+        />
+        <FormHelperText error={errorMsg && errorMsg.length > 0} >{errorMsg}</FormHelperText>
       </FormControl>
     </form>
   );
