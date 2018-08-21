@@ -107,7 +107,7 @@ function PageLayout(props) {
                           />
                         </Grid>
                         <Grid item xs={3} className={classes.centered}>
-                          <p>${getProductPrice(elem.product_id, elem.quantity) || '0.00'}</p>
+                          <p>${getProductPrice(elem.product_id, elem.quantity).toFixed(2) || '0.00'}</p>
                         </Grid>
                       </React.Fragment>
                     )

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 
-import MainPage from '../components/mainPage';
+import MainPage from '../components/invoiceTab';
 
 interface IMainPageContainer {
   push: (url: string) => void,
@@ -13,6 +13,7 @@ interface IMainPageContainer {
 }
 class MainPageContainer extends React.Component<IMainPageContainer> {
   toInvoice = (e) => {
+    console.log(e.target)
     const invoiceId = e.target.parentNode.id
     this.props.push(`/invoices/${invoiceId}`)
   }

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 
-import InvoicePage from '../components/invoicePage';
+import InvoicePage from '../components/invoiceTab';
 
 interface IInvoicePageContainer {
   push: (url: string) => void,
@@ -19,7 +19,12 @@ class InvoicePageContainer extends React.Component<IInvoicePageContainer> {
   }
   render() {
     return (
-      <InvoicePage toInvoice={this.toInvoice} invoices={this.props.invoices} customersNames={this.props.customersNameById}/>
+      <InvoicePage
+        invoicePage={true}
+        toInvoice={this.toInvoice}
+        invoices={this.props.invoices}
+        customersNames={this.props.customersNameById}
+      />
     );
   }
 }
