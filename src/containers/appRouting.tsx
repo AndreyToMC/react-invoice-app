@@ -16,6 +16,8 @@ import ViewInvoicePageContainer from './viewInvoicePageContainer';
 
 import history from '../services/history';
 
+import ErrorSnackbar from '../components/errorSnackbar';
+
 class AppRouter extends React.Component {
   render() {
     return (
@@ -30,6 +32,7 @@ class AppRouter extends React.Component {
             <Route path='/invoices/:id' component={ViewInvoicePageContainer} />
             <Route path='/invoices_edit/:id' component={EditInvoicePageContainer} />
             <Route path='/create_invoice' component={CreateInvoicePageContainer} />
+            <ErrorSnackbar />
           </Container>
         </div>
       </ConnectedRouter>

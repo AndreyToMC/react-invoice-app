@@ -1,8 +1,6 @@
-
-import axios from 'axios'
-import { apiURL } from '../services/apiURL';
+import sendRequest from '../services/requestService'
 
 export const getCustomers = () => ({
   type: 'GET_CUSTOMERS',
-  payload: axios.get(apiURL + '/api/customers').then((res) => res.data),
+  payload: sendRequest('get', '/api/customers'),
 });

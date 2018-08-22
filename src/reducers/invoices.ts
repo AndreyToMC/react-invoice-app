@@ -7,7 +7,8 @@ const invoices = (state = {invoicesList: [], currentInvoice: {}}, action) => {
       const currentInvoice = action.payload;
       return { ...state, currentInvoice};
     case 'SEND_INVOICES_FULFILLED':
-      const newInvoice = action.payload.data;
+      const newInvoice = action.payload;
+      console.log(newInvoice)
       let newInvoiceArr = [];
       newInvoiceArr = newInvoiceArr.concat(state.invoicesList);
       newInvoiceArr.push(newInvoice);

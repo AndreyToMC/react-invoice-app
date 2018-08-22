@@ -1,8 +1,7 @@
 
-import axios from 'axios';
-import { apiURL } from '../services/apiURL';
+import sendRequest from '../services/requestService'
 
 export const getProducts = () => ({
   type: 'GET_PRODUCTS',
-  payload: axios.get(apiURL + '/api/products').then((res) => res.data),
+  payload: sendRequest('get', '/api/products'),
 });

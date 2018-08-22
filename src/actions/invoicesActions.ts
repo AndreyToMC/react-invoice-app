@@ -1,25 +1,26 @@
-import axios from 'axios';
+import sendRequest from '../services/requestService'
+
 import { push } from 'react-router-redux';
-import { apiURL } from '../services/apiURL';
 
 export const getInvoices = () => ({
   type: 'GET_INVOICES',
-  payload: axios.get(`${apiURL}/api/invoices`).then((res) => res.data),
+  payload: sendRequest('get', '/api/invoices'),
 });
 export const getInvoiceById = (id: number) => ({
   type: 'GET_INVOICE_BY_ID',
-  payload: axios.get(`${apiURL}/api/invoices/${id}`).then((res) => res.data),
+  payload: sendRequest('get', `/api/invoices/${id}`),
 });
 
 export const sendInvoices = (invoiceData, itemsArr) => (dispatch) => {
   const response = dispatch({
     type: 'SEND_INVOICES',
-    payload: axios.post(`${apiURL}/api/invoices`, { ...invoiceData }),
+    payload: sendRequest('post', '/api/invoices', { ...invoiceData }),
   });
   response.then((data) => {
-    const invoiceId = data.value.data.id;
-    return Promise.all(itemsArr.map((elem) => axios.post(
-      `${apiURL}/api/invoices/${invoiceId}/items`,
+    const invoiceId = data.value.id;
+    return Promise.all(itemsArr.map((elem) => sendRequest(
+      'post',
+      `/api/invoices/${invoiceId}/items`,
       { product_id: elem.product_id, quantity: elem.quantity },
       ))).then((res) => invoiceId);
   }).then(() => {
@@ -29,10 +30,10 @@ export const sendInvoices = (invoiceData, itemsArr) => (dispatch) => {
 
 export const changeInvoice = (id, invoiceData) => ({
   type: 'CHANGE_INVOICE',
-  payload: axios.put(`${apiURL}/api/invoices/${id}`, {...invoiceData}).then((res) => res.data),
+  payload: sendRequest('put', `/api/invoices/${id}`, {...invoiceData}),
 });
 
 export const deleteInvoice = (id) => ({
   type: 'DELETE_INVOICE',
-  payload: axios.delete(`${apiURL}/api/invoices/${id}`).then((res) => res.data),
+  payload: sendRequest('delete', `/api/invoices/${id}`),
 });
