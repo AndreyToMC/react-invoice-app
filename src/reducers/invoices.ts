@@ -22,6 +22,11 @@ const invoices = (state = {invoicesList: [], currentInvoice: {}}, action) => {
       });
       newInvoicesArr[oldInvoice] = newInvoiceValues;
       return { invoicesList: newInvoicesArr, currentInvoice: newInvoiceValues};
+    case 'DELETE_INVOICE_FULFILLED':
+      const deletedInvoiceId = action.payload.id
+      const newState = {...state}
+      newState.invoicesList = newState.invoicesList.filter((elem) => elem.id !== deletedInvoiceId)
+      return { ...newState};
     default:
       return state;
   }

@@ -94,7 +94,6 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     if (newItem) {
       newInvoiceItemsList = [...this.props.invoiceItems]
       newInvoiceItemsList.push(newItem)
-      console.log(newInvoiceItemsList)
     }
     const totalPrice = this.getTotalPrice(newInvoiceItemsList, this.props.currentInvoice.discount)
     const newInvoice: Iinvoice = {...this.props.currentInvoice}
@@ -149,7 +148,6 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
 
   onItemListInputChange(e, inputId) {
     const invoiceId = this.state.invoiceId;
-
     const item: InvoiceItem = this.props.invoiceItems.filter((elem: InvoiceItem) => inputId === elem.id).shift();
     switch (e.target.name) {
       case 'listItemProductInput':
@@ -178,7 +176,6 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     const {
       invoiceItems, customers, products, currentInvoice,
     } = this.props;
-    console.log(invoiceItems)
     return (
       <EditInvoicePage
         invoiceId={currentInvoice.id}

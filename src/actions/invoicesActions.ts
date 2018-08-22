@@ -31,10 +31,8 @@ export const changeInvoice = (id, invoiceData) => ({
   type: 'CHANGE_INVOICE',
   payload: axios.put(`${apiURL}/api/invoices/${id}`, {...invoiceData}).then((res) => res.data),
 });
-{
 
-};
-
-export const deleteInvoice = (id) => (dispatch) => {
-  axios.delete(`${apiURL}/api/invoices/${id}`).then((res) => res.data);
-};
+export const deleteInvoice = (id) => ({
+  type: 'DELETE_INVOICE',
+  payload: axios.delete(`${apiURL}/api/invoices/${id}`).then((res) => res.data),
+});

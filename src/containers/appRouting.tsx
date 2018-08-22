@@ -12,6 +12,7 @@ import HeaderContainer from './headerContainer';
 import InvoicePageContainer from './invoicePageContainer';
 import MainPageContainer from './mainPageContainer';
 import ProductsPageContainer from './productsPageContainer';
+import ViewInvoicePageContainer from './viewInvoicePageContainer';
 
 import history from '../services/history';
 
@@ -26,7 +27,8 @@ class AppRouter extends React.Component {
             <Route path='/customers' component={CustomersPageContainer} />
             <Route exact={true} path='/invoices' component={InvoicePageContainer} />
             <Route path='/products' component={ProductsPageContainer} />
-            <Route path='/invoices/:id' component={EditInvoicePageContainer} />
+            <Route path='/invoices/:id' component={ViewInvoicePageContainer} />
+            <Route path='/invoices_edit/:id' component={EditInvoicePageContainer} />
             <Route path='/create_invoice' component={CreateInvoicePageContainer} />
           </Container>
         </div>

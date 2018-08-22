@@ -139,8 +139,6 @@ class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps,
   }
 
   onItemListInputChange(e, inputId) {
-    console.log(this.state)
-    console.log(e.target.value, inputId)
     switch (e.target.name) {
       case 'listItemProductInput':
         const newProductId = e.target.value;
@@ -150,7 +148,6 @@ class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps,
           const productPrice = this.getProductPrice(newProductId, quantity);
           newState.invoiceItemsInputs[inputId].product_id = newProductId;
           newState.invoiceItemsInputs[inputId].productPriceTotal = productPrice.toFixed(2);
-          console.log(newState.invoiceItemsInputs)
           newState.totalPrice = this.getTotalPrice(newState, null);
           return newState;
         });
@@ -158,7 +155,6 @@ class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps,
       case 'listItemQtyInput':
         const newQuantity = e.target.value;
         if (newQuantity >= 0) {
-          console.log(e.target, inputId)
           this.setState((prevState) => {
             const newState = {...prevState};
             const productId = newState.invoiceItemsInputs[inputId].product_id;
@@ -244,7 +240,7 @@ function mapStateToProps(state) {
     customers: state.customers.customersList,
     products: state.products.productsList,
     productsPriceById: state.products.productsPriceById,
-    invoiceId: state.invoices.invoicesList.length + 1,
+    invoiceId: state.invoices.invoicesList.slice(-1).shift() && state.invoices.invoicesList.slice(-1).shift().id + 1,
   };
 }
 function mapDispatchToProps(dispatch) {

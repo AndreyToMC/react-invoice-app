@@ -21,7 +21,7 @@ const styles = (theme) => createStyles({
 });
 
 function SimpleTable(props) {
-  const { classes, invoices, customersNames, toInvoice, invoicePage, toEditInvoice, deleteInvoice } = props;
+  const { classes, invoices, customersNames, toInvoice, invoicePage, toEditInvoice, toDeleteInvoice } = props;
 
   return (
     <Paper className={classes.root}>
@@ -54,7 +54,7 @@ function SimpleTable(props) {
                     Edit
                   </Button>}
                   {invoicePage &&
-                  <Button id={elem.id} onClick={deleteInvoice} variant='outlined' color='secondary' className={classes.button}>
+                  <Button id={elem.id} onClick={toDeleteInvoice} variant='outlined' color='secondary' className={classes.button}>
                     Delete
                   </Button>}
                   </TableCell>

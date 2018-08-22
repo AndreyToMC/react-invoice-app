@@ -1,31 +1,51 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
 
-const CustomersPage = ({ customers }) => (
-  <Table hover={true}>
-    <thead>
-      <tr>
-        <th>Customer Name</th>
-        <th>Customer Address</th>
-        <th>Customer Phone number</th>
-      </tr>
-    </thead>
-    <tbody>
-      {customers.map((elem) => (
-        <tr>
-          <td>{elem.name}</td>
-          <td>{elem.address}</td>
-          <td>{elem.phone}</td>
-        </tr>
-      ))}
+import Paper from '@material-ui/core/Paper';
+import { createStyles, withStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
-      <tr>
-        <td>Name</td>
-        <td>Address</td>
-        <td>Phone number</td>
-      </tr>
-    </tbody>
-  </Table>
-);
+const styles = (theme) => createStyles({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 700,
+  },
+});
 
-export default CustomersPage;
+function CustomersPage(props) {
+  const { classes, customers } = props;
+
+  return (
+    <Paper className={classes.root}>
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Customer Name</TableCell>
+            <TableCell>Customer Address</TableCell>
+            <TableCell>Customer Phone number</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {customers.length && customers.map((elem, i) => {
+            return (
+              <TableRow id={elem.id} key={elem.id}>
+                <TableCell>{elem.name}</TableCell>
+                <TableCell>{elem.address}</TableCell>
+                <TableCell>{elem.phone}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Paper>
+  );
+}
+
+export default withStyles(styles)(CustomersPage);

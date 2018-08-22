@@ -118,7 +118,6 @@ function PageLayout(props) {
                       values={products}
                       onChange={onAddInputsChange}
                       selected={productInputValue}
-                      id='inputAddProduct'
                       placeholder='Add Product'
                       errorMsg={errors && errors.invoiceItems}
                     />
@@ -126,7 +125,6 @@ function PageLayout(props) {
                   <Grid item xs={3}>
                     <NumberInput
                       name='qtyInput'
-                      id='inputAddQuantity'
                       onChange={onAddInputsChange}
                       value={qtyInputValue}
                     />

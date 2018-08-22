@@ -13,7 +13,6 @@ interface IMainPageContainer {
 }
 class MainPageContainer extends React.Component<IMainPageContainer> {
   toInvoice = (e) => {
-    console.log(e.target)
     const invoiceId = e.target.parentNode.id
     this.props.push(`/invoices/${invoiceId}`)
   }
