@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import Snackbar from '@material-ui/core/Snackbar';
 
+import { subject } from '../actions/newError'
+
 interface IErrorSnackbar {
   errorMsg: string,
 }
@@ -16,10 +18,10 @@ class ErrorSnackbar extends React.Component<IErrorSnackbar> {
   handleClose = () => {
     this.setState({ open: false });
   };
-  componentWillReceiveProps(props, state) {
-    if (props.errorMsg) {
-      this.setState({ open: true })
-    }
+  componentDidMount() {
+    subject.subscribe({
+      next: () => this.setState({open: true}),
+    });
   }
   render() {
     const { open } = this.state;

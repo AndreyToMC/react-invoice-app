@@ -1,6 +1,7 @@
 const products = (state = { productsList: [], productsPriceById: {}, productsNameById: {} }, action) => {
   switch (action.type) {
     case 'GET_PRODUCTS_FULFILLED':
+      console.log(action)
       const productsArr = action.payload;
       const productsPriceById = {};
       const productsNameById = {};
