@@ -2,8 +2,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { getInvoices } from '../actions/invoicesActions';
 import { getCustomers } from '../redux/customers/actions';
+import { getInvoices } from '../redux/invoices/actions';
 import { getProducts } from '../redux/products/actions';
 
 import AppRouter from './appRouting';

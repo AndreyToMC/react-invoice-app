@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getInvoiceById  } from '../actions/invoicesActions';
-import { getInvoicesItems  } from '../actions/invoicesItemsActions';
 import ViewInvoicePage from '../components/viewInvoicePage';
+import { getInvoicesItems  } from '../redux/invoiceItems/actions';
+import { getInvoiceById  } from '../redux/invoices/actions';
 
 interface IEditInvoicePageProps {
   match: {

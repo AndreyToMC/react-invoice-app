@@ -9,9 +9,9 @@ import history from '../services/history';
 
 import customers from './customers/reducers';
 import products from './products/reducers';
+import invoiceItems from './invoiceItems/reducers';
 import errors from '../reducers/errors';
-import invoiceItems from '../reducers/invoiceItems';
-import invoices from '../reducers/invoices';
+import invoices from './invoices/reducers';
 
 const rootReducer = combineReducers({
   errors,
@@ -24,10 +24,21 @@ const rootReducer = combineReducers({
 
 import * as customersEpics from './customers/epics'
 import * as productsEpics from './products/epics'
+import * as invoiceItemsEpics from './invoiceItems/epics'
+import * as invoiceEpics from './invoices/epics'
 
 const rootEpic = combineEpics(
   customersEpics.getCustomersEpic,
   productsEpics.getProductsEpic,
+  invoiceItemsEpics.getInvoicesItemsEpic,
+  invoiceItemsEpics.addInvoicesItemsEpic,
+  invoiceItemsEpics.changeInvoicesItemEpic,
+  invoiceItemsEpics.deleteInvoicesItemEpic,
+  invoiceEpics.getInvoicesEpic,
+  invoiceEpics.getInvoiceByIdEpic,
+  invoiceEpics.sendInvoicesEpic,
+  invoiceEpics.changeInvoiceEpic,
+  invoiceEpics.deleteInvoiceEpic,
 );
 
 const epicMiddleware = createEpicMiddleware();

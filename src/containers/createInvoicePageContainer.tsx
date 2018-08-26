@@ -4,8 +4,8 @@ import { Prompt } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
 
-import { sendInvoices } from '../actions/invoicesActions';
 import CreateInvoicePage from '../components/invoiceActionsPage/pageLayout';
+import { sendInvoices } from '../redux/invoices/actions';
 
 interface ICreateInvoicePageProps {
   invoiceId: number,

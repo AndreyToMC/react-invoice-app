@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { bindActionCreators } from 'redux';
-import { deleteInvoice } from '../actions/invoicesActions'
+import { deleteInvoice } from '../redux/invoices/actions'
 
 import InvoicePage from '../components/invoiceTab';
 
