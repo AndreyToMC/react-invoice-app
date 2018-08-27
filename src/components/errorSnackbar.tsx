@@ -16,11 +16,6 @@ class ErrorSnackbar extends React.Component<IErrorSnackbar> {
   handleClose = () => {
     this.setState({ open: false });
   };
-  componentWillReceiveProps(props, state) {
-    if (props.errorMsg) {
-      this.setState({ open: true })
-    }
-  }
   render() {
     const { open } = this.state;
     const { errorMsg } = this.props;

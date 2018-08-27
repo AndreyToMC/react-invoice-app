@@ -5,7 +5,7 @@ import './index.css';
 
 import registerServiceWorker from './registerServiceWorker';
 
-import '/home/mc05/projects/react-invoice/node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <App />,
