@@ -2,7 +2,7 @@
 import { sendRequestObservable } from '../../../services/requestObservable'
 
 import { ofType } from 'redux-observable'
-import { map, mergeMap, pairwise, pluck, switchMap, take, tap } from 'rxjs/operators'
+import { concatMap, map, mergeMap, pairwise, pluck, subscribeOn, switchMap, take, tap, zip} from 'rxjs/operators'
 
 import {
   ActionTypes,
@@ -14,6 +14,13 @@ import {
 } from '../actions'
 
 import { addInvoicesItems } from '../../invoiceItems/actions'
+
+interface Ires {
+  id?: number,
+  customer_id?: string,
+  discount?: string,
+  total?: string,
+}
 
 export const getInvoicesEpic = (action$) => action$.pipe(
   ofType(ActionTypes.GET_INVOICES),
@@ -35,18 +42,21 @@ export const getInvoiceByIdEpic = (action$) => action$.pipe(
 
 export const sendInvoicesEpic = (action$) => action$.pipe(
   ofType(ActionTypes.SEND_INVOICES),
-  tap(console.log),
-  mergeMap((action: any) =>
+  switchMap((action: any) =>
     sendRequestObservable('post', '/api/invoices', { ...action.payload.invoiceData }).pipe(
-      map((response) => sendInvoicesFulfilled(response)),
-      map(({payload}) => {
-        const invoiceId = payload.id
-        const itemsArr = action.payload.itemsArr
-        console.log(invoiceId, itemsArr)
+      concatMap((response: Ires) => {
+        const invoiceId = response.id
+        const requests = []
+        const items = action.payload.itemsArr
+        requests.push(sendInvoicesFulfilled(response))
+        items.forEach((el) => {
+          requests.push(addInvoicesItems(invoiceId, el))
+        })
+        return requests
       }),
     ),
   ),
-);
+)
 
 export const changeInvoiceEpic = (action$) => action$.pipe(
   ofType(ActionTypes.CHANGE_INVOICE),

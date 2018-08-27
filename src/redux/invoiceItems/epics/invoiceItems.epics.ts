@@ -12,6 +12,13 @@ import {
   getInvoicesItemsFulfilled,
 } from '../actions'
 
+interface ItemRes {
+  id: number,
+  invoice_id: number,
+  product_id: string,
+  quantity: number,
+}
+
 export const getInvoicesItemsEpic = (action$) => action$.pipe(
   ofType(ActionTypes.GET_INVOICE_ITEMS),
   switchMap((action: any) =>
@@ -19,7 +26,8 @@ export const getInvoicesItemsEpic = (action$) => action$.pipe(
       'get',
       `/api/invoices/${action.payload.invoicesId}/items`,
     ).pipe(
-      map((response) => getInvoicesItemsFulfilled(response)),
+      map((response) => getInvoicesItemsFulfilled(response),
+      ),
     ),
   ),
 );
@@ -32,7 +40,16 @@ export const addInvoicesItemsEpic = (action$) => action$.pipe(
       `/api/invoices/${action.payload.invoicesId}/items`,
       {...action.payload.data},
     ).pipe(
-      map((response) => addInvoicesItemsFulfilled(response)),
+      map((response: ItemRes) => {
+        const product_id = parseInt(response.product_id, 10)
+        const item = {
+          id: response.id,
+          invoice_id: response.invoice_id,
+          product_id,
+          quantity: response.quantity,
+        }
+        return addInvoicesItemsFulfilled(item)
+      }),
     ),
   ),
 );
@@ -45,7 +62,16 @@ export const changeInvoicesItemEpic = (action$) => action$.pipe(
       `/api/invoices/${action.payload.invoicesId}/items/${action.payload.id}`,
       {...action.payload.data},
     ).pipe(
-      map((response) => changeInvoicesItemFulfilled(response)),
+      map((response: ItemRes) => {
+        const product_id = parseInt(response.product_id, 10)
+        const item = {
+          id: response.id,
+          invoice_id: response.invoice_id,
+          product_id,
+          quantity: response.quantity,
+        }
+        return changeInvoicesItemFulfilled(item)
+      }),
     ),
   ),
 );

@@ -23,6 +23,7 @@ const invoices = (state = initialState, action) => {
       newInvoicesArr.forEach((elem, i) => {
         if (elem.id === newInvoiceValues.id) { oldInvoice = i }
       });
+      newInvoiceValues.customer_id = parseInt(newInvoiceValues.customer_id, 10)
       newInvoicesArr[oldInvoice] = newInvoiceValues;
       return { invoicesList: newInvoicesArr, currentInvoice: newInvoiceValues};
     case ActionTypes.DELETE_INVOICE_FULFILLED:

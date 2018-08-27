@@ -170,6 +170,7 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
   }
 
   render() {
+    console.log(this.props)
     const {
       addInput,
     } = this.state;

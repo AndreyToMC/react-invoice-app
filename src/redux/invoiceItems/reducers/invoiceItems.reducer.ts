@@ -18,6 +18,7 @@ const invoiceItems = (state = initialState, action) => {
         if (elem.id === newItem.id) { oldItem = i }
       });
       newItemArr[oldItem] = newItem;
+      console.log(newItemArr)
       return [...newItemArr];
     case ActionTypes.DELETE_INVOICE_ITEM_FULFILLED:
       return state;

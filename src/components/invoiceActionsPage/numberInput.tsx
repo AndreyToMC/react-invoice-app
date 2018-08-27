@@ -37,8 +37,7 @@ class NumberInput extends React.Component<InumberInputProps> {
     this.props.onChange(e, id)
   }
   render() {
-    console.log(typeof this.props.id)
-    const { classes, value, name, id, label, disabled, errorMsg } = this.props;
+    const { classes, value, name, label, disabled, errorMsg } = this.props;
     return (
       <form className={classes.root}>
         <FormControl className={classes.formControl}>
@@ -48,7 +47,6 @@ class NumberInput extends React.Component<InumberInputProps> {
             disabled={disabled}
             type='number'
             name={name}
-            id={id}
             onChange={this.onInputChange}
             value={value}
           />
