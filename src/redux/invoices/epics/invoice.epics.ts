@@ -53,11 +53,11 @@ export const sendInvoicesEpic = (action$, store$) => action$.pipe(
         items.forEach((el) => {
           requests.push(addInvoicesItems(invoiceId, el))
         })
+        requests.push(push(`/invoices/`))
         return requests
       }),
     ),
   ),
-  mapTo(push(`/invoices/`)),
 )
 
 export const changeInvoiceEpic = (action$) => action$.pipe(
