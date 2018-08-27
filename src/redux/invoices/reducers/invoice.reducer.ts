@@ -1,3 +1,6 @@
+
+import * as _ from 'lodash';
+
 import { ActionTypes } from '../actions';
 import { initialState } from '../states';
 
@@ -17,15 +20,10 @@ const invoices = (state = initialState, action) => {
       return { ...state, invoicesList: newInvoiceArr};
     case ActionTypes.CHANGE_INVOICE_FULFILLED:
       const newInvoiceValues = action.payload;
-      let newInvoicesArr = [];
-      newInvoicesArr = newInvoicesArr.concat(state.invoicesList);
-      let oldInvoice;
-      newInvoicesArr.forEach((elem, i) => {
-        if (elem.id === newInvoiceValues.id) { oldInvoice = i }
-      });
       newInvoiceValues.customer_id = parseInt(newInvoiceValues.customer_id, 10)
-      newInvoicesArr[oldInvoice] = newInvoiceValues;
-      return { invoicesList: newInvoicesArr, currentInvoice: newInvoiceValues};
+      const index = _.findIndex(state.invoicesList, (o) => o.id === newInvoiceValues.id);
+      const newInvoicesList = _.fill(state.invoicesList, newInvoiceValues, index, index + 1)
+      return { invoicesList: newInvoicesList, currentInvoice: newInvoiceValues};
     case ActionTypes.DELETE_INVOICE_FULFILLED:
       const deletedInvoiceId = action.payload.id
       const newState = {...state}

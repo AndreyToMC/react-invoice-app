@@ -10,7 +10,7 @@ import history from '../services/history';
 import customers from './customers/reducers';
 import products from './products/reducers';
 import invoiceItems from './invoiceItems/reducers';
-import errors from '../reducers/errors';
+import errors from './errors/reducers';
 import invoices from './invoices/reducers';
 
 const rootReducer = combineReducers({

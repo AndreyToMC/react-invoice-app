@@ -210,7 +210,6 @@ class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps,
     const {
       isBlocking, customerInput, invoiceItemsInputs, addInput, totalPrice, discountInput, errorMsg,
     } = this.state;
-    console.log(invoiceItemsInputs)
     return (
       <div>
         <CreateInvoicePage

@@ -26,7 +26,6 @@ const styles = (theme) => createStyles({
 function MySelect(props) {
   const { classes, name, values, selected, onChange, placeholder, id, label, errorMsg } = props;
   const changeSelect = (e) => {
-    console.log(e.target)
     onChange(e, id)
   }
   return (

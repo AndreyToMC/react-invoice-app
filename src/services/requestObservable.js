@@ -1,10 +1,8 @@
-import { errorAction } from '../actions/newError';
+import { newErrorToStore } from '../redux/errors/actions';
 
-import { Observable } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
-import {pipe, map, catchError, tap} from 'rxjs/operators'
+import {pipe, map, catchError} from 'rxjs/operators'
 
-import { push } from 'react-router-redux';
 import { apiURL } from '../services/apiURL';
 
 export function sendRequestObservable(method: string, url: string, data?: any) {
@@ -14,6 +12,6 @@ export function sendRequestObservable(method: string, url: string, data?: any) {
     body: data,
   }).pipe(
     map(e => e.response),
-    catchError(error => errorAction(error.message))
+    catchError(error => newErrorToStore(error.message))
   )
 }

@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 import { ActionTypes } from '../actions';
 import { initialState } from '../states';
 
@@ -11,15 +13,9 @@ const invoiceItems = (state = initialState, action) => {
       return [...state, invoiceItem];
     case ActionTypes.CHANGE_INVOICE_ITEM_FULFILLED:
       const newItem = action.payload;
-      let newItemArr = [];
-      newItemArr = newItemArr.concat(state);
-      let oldItem;
-      newItemArr.forEach((elem, i) => {
-        if (elem.id === newItem.id) { oldItem = i }
-      });
-      newItemArr[oldItem] = newItem;
-      console.log(newItemArr)
-      return [...newItemArr];
+      const index = _.findIndex(state, (o) => o.id === newItem.id);
+      const newItemList = _.fill(state, newItem, index, index + 1)
+      return [...newItemList];
     case ActionTypes.DELETE_INVOICE_ITEM_FULFILLED:
       return state;
 

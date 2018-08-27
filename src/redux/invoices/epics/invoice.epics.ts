@@ -1,8 +1,9 @@
 
+import { push } from 'react-router-redux';
 import { sendRequestObservable } from '../../../services/requestObservable'
 
 import { ofType } from 'redux-observable'
-import { concatMap, map, mergeMap, pairwise, pluck, subscribeOn, switchMap, take, tap, zip} from 'rxjs/operators'
+import {concatMap, map, mapTo, mergeMap, pairwise, pluck, subscribeOn, switchMap, take, tap, zip} from 'rxjs/operators'
 
 import {
   ActionTypes,
@@ -40,7 +41,7 @@ export const getInvoiceByIdEpic = (action$) => action$.pipe(
   ),
 );
 
-export const sendInvoicesEpic = (action$) => action$.pipe(
+export const sendInvoicesEpic = (action$, store$) => action$.pipe(
   ofType(ActionTypes.SEND_INVOICES),
   switchMap((action: any) =>
     sendRequestObservable('post', '/api/invoices', { ...action.payload.invoiceData }).pipe(
@@ -56,6 +57,7 @@ export const sendInvoicesEpic = (action$) => action$.pipe(
       }),
     ),
   ),
+  mapTo(push(`/invoices/`)),
 )
 
 export const changeInvoiceEpic = (action$) => action$.pipe(
