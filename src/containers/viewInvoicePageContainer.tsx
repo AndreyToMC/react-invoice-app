@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import ViewInvoicePage from '../components/viewInvoicePage';
-import { getInvoicesItems  } from '../redux/invoiceItems/actions';
-import { getInvoiceById  } from '../redux/invoices/actions';
+import {getInvoicesItems} from '../redux/invoiceItems/actions';
+import {getInvoiceById} from '../redux/invoices/actions';
 
 interface IEditInvoicePageProps {
   match: {
@@ -28,12 +28,6 @@ interface Iinvoice {
   total: string,
 }
 
-interface InvoiceItem {
-  id?: number,
-  quantity: number,
-  product_id: number,
-}
-
 class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps> {
   componentDidMount() {
     const invoiceId = this.props.match.params.id;
@@ -41,8 +35,8 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps> {
     this.props.getInvoicesItems(invoiceId);
   }
   getCustomer(customerId, customersList) {
-    let customer = customersList.filter((elem) => elem.id === customerId)
-    customer = customer.shift()
+    let customer = customersList.filter((elem) => elem.id === customerId);
+    customer = customer.shift();
     if (customer) {
       return customer.name
     }
@@ -51,20 +45,18 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps> {
     if (!inviceItems || !productsNamesList || !productsPriceList) {
       return
     }
-    const itemsList = inviceItems.map((elem) => {
-      const item = {
+    return inviceItems.map((elem) => {
+      return {
         name: productsNamesList[elem.product_id],
         quantity: elem.quantity,
         price: elem.quantity * productsPriceList[elem.product_id],
       }
-      return item
     })
-    return itemsList
   }
   render() {
-    const { customers, invoiceItems, currentInvoice, products, productsPriceById, productsNameById } = this.props
-    const customer = this.getCustomer(currentInvoice.customer_id, customers)
-    const itemsList = this.getIntemsRow(invoiceItems, productsNameById, productsPriceById)
+    const { customers, invoiceItems, currentInvoice, products, productsPriceById, productsNameById } = this.props;
+    const customer = this.getCustomer(currentInvoice.customer_id, customers);
+    const itemsList = this.getIntemsRow(invoiceItems, productsNameById, productsPriceById);
     return (
       <ViewInvoicePage
         currentInvoice={currentInvoice.id}

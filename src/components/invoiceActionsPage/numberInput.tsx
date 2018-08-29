@@ -33,9 +33,9 @@ interface InumberInputProps extends WithStyles<typeof styles> {
 
 class NumberInput extends React.Component<InumberInputProps> {
   onInputChange = (e) => {
-    const id = this.props.id
+    const id = this.props.id;
     this.props.onChange(e, id)
-  }
+  };
   render() {
     const { classes, value, name, label, disabled, errorMsg } = this.props;
     return (

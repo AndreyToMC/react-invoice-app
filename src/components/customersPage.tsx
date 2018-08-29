@@ -33,7 +33,7 @@ function CustomersPage(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {customers.length && customers.map((elem, i) => {
+          {customers && customers.map((elem) => {
             return (
               <TableRow id={elem.id} key={elem.id}>
                 <TableCell>{elem.name}</TableCell>

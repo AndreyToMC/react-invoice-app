@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 
 interface IErrorSnackbar {
-  errorMsg: string,
+  errorMsg?: string,
 }
 
 class ErrorSnackbar extends React.Component<IErrorSnackbar> {

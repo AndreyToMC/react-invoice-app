@@ -41,7 +41,7 @@ export const getInvoiceByIdEpic = (action$) => action$.pipe(
   ),
 );
 
-export const sendInvoicesEpic = (action$, store$) => action$.pipe(
+export const sendInvoicesEpic = (action$) => action$.pipe(
   ofType(ActionTypes.SEND_INVOICES),
   switchMap((action: any) =>
     sendRequestObservable('post', '/api/invoices', { ...action.payload.invoiceData }).pipe(

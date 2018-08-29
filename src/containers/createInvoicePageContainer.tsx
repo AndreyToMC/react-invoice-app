@@ -41,12 +41,6 @@ interface Iinvoice {
   total: string,
 }
 
-interface InvoiceItem {
-  id?: number,
-  quantity: number,
-  product_id: number,
-}
-
 class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps, ICreateInvoicePageState> {
   constructor(props) {
     super(props);
@@ -107,7 +101,7 @@ class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps,
           const newState = {...prevState};
           const qtyValue = prevState.addInput.qtyInput;
           const productPriceTotal = this.getProductPrice(productId, qtyValue);
-          const productInputId = prevState.invoiceItemsInputs.length
+          const productInputId = prevState.invoiceItemsInputs.length;
           newState.invoiceItemsInputs.push({ id: productInputId, product_id: productId, quantity: qtyValue, productPriceTotal });
           newState.errorMsg.invoiceItems = '';
           newState.addInput.qtyInput = 0;
@@ -198,13 +192,13 @@ class CrateInvoicePageContainer extends React.Component<ICreateInvoicePageProps,
       });
       return
     }
-    this.setState({isBlocking: false})
-    const customer_id = parseInt(customerInput, 10)
+    this.setState({isBlocking: false});
+    const customer_id = parseInt(customerInput, 10);
     this.props.sendInvoices({customer_id, discount: discountInput, total: totalPrice}, invoiceItemsInputs)
 
   }
 
-  redirect = (location) => `Are you sure you want to go to ${location.pathname}`
+  redirect = (location) => `Are you sure you want to go to ${location.pathname}`;
 
   render() {
     const {

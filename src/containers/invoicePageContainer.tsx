@@ -16,16 +16,16 @@ interface IInvoicePageContainer {
 
 class InvoicePageContainer extends React.Component<IInvoicePageContainer> {
   toInvoice = (e) => {
-    const invoiceId = e.target.parentNode.id
+    const invoiceId = e.target.parentNode.id;
     this.props.push(`/invoices/${invoiceId}`)
-  }
+  };
   toEditInvoice = (e) => {
-  const invoiceId = e.target.parentNode.id
+  const invoiceId = e.target.parentNode.id;
   this.props.push(`/invoices_edit/${invoiceId}`)
-  }
+  };
   toDeleteInvoice = (e) => {
     this.props.deleteInvoice(e.target.parentNode.id)
-  }
+  };
   render() {
     return (
       <InvoicePage

@@ -55,7 +55,7 @@ function CustomersPage(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {invoiceItems.length && invoiceItems.map((elem, i) => {
+          {invoiceItems.length && invoiceItems.map((elem) => {
             return (
               <TableRow id={elem.id} key={elem.id}>
                 <TableCell>{elem.name}</TableCell>

@@ -83,23 +83,23 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     if (item) {
       this.props.invoiceItems.forEach((elem: Iinvoice) => {
         if (elem.id === item.id) {
-          const newElem = {...item}
+          const newElem = {...item};
           newElem.product_id = data.productId;
-          newElem.quantity = data.quantity
+          newElem.quantity = data.quantity;
           newInvoiceItemsList.push(newElem)
         } else {newInvoiceItemsList.push(elem)}
       })
     }
 
     if (newItem) {
-      newInvoiceItemsList = [...this.props.invoiceItems]
+      newInvoiceItemsList = [...this.props.invoiceItems];
       newInvoiceItemsList.push(newItem)
     }
-    const totalPrice = this.getTotalPrice(newInvoiceItemsList, this.props.currentInvoice.discount)
-    const newInvoice: Iinvoice = {...this.props.currentInvoice}
-    newInvoice.total = totalPrice
+    const totalPrice = this.getTotalPrice(newInvoiceItemsList, this.props.currentInvoice.discount);
+    const newInvoice: Iinvoice = {...this.props.currentInvoice};
+    newInvoice.total = totalPrice;
     this.props.changeInvoice(invoiceId, newInvoice)
-  }
+  };
 
   getTotalPrice(products, discount) {
     const itemsTotalPrice = products.reduce((ac, elem) => ac + this.getProductPrice(elem.product_id, elem.quantity), 0);
@@ -117,15 +117,15 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     switch (e.target.name) {
       case 'customerInput':
         const customerId = e.target.value;
-        const newInvoice = {...this.props.currentInvoice}
-        newInvoice.customer_id = customerId
-        this.props.changeInvoice(invoiceId, newInvoice)
+        const newInvoice = {...this.props.currentInvoice};
+        newInvoice.customer_id = customerId;
+        this.props.changeInvoice(invoiceId, newInvoice);
         break;
       case 'productInput':
         const product_id = parseInt(e.target.value, 10);
         const quantityInp = this.state.addInput.qtyInput;
-        this.props.addInvoicesItems(invoiceId, {product_id, quantity: quantityInp})
-        this.setNewTotal(invoiceId, null, null, {product_id, quantity: quantityInp})
+        this.props.addInvoicesItems(invoiceId, {product_id, quantity: quantityInp});
+        this.setNewTotal(invoiceId, null, null, {product_id, quantity: quantityInp});
         this.setState((prevState) => {
           const newState = {...prevState};
           newState.addInput.qtyInput = 0;
@@ -152,18 +152,18 @@ class EditInvoicePageContainer extends React.Component<IEditInvoicePageProps, IE
     switch (e.target.name) {
       case 'listItemProductInput':
         const product_id = parseInt(e.target.value, 10);
-        const itemQty = item.quantity
-        this.props.changeInvoicesItem(invoiceId, {product_id, quantity: itemQty}, inputId)
-        this.setNewTotal(invoiceId, item, {productId: product_id, quantity: itemQty}, null)
+        const itemQty = item.quantity;
+        this.props.changeInvoicesItem(invoiceId, {product_id, quantity: itemQty}, inputId);
+        this.setNewTotal(invoiceId, item, {productId: product_id, quantity: itemQty}, null);
         break;
       case 'listItemQtyInput':
         const quantity = e.target.value;
         if (quantity < 0) {
           return
         }
-        const productId = item.product_id
-        this.props.changeInvoicesItem(invoiceId, {product_id: productId, quantity}, inputId)
-        this.setNewTotal(invoiceId, item, {productId, quantity}, null)
+        const productId = item.product_id;
+        this.props.changeInvoicesItem(invoiceId, {product_id: productId, quantity}, inputId);
+        this.setNewTotal(invoiceId, item, {productId, quantity}, null);
         break;
       default:
     }

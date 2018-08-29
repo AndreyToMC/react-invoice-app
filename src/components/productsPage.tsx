@@ -8,6 +8,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import AddProductForm from '../containers/formicTry'
+
 const styles = (theme) => createStyles({
   root: {
     width: '100%',
@@ -32,7 +34,7 @@ function ProductsPage(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.length && products.map((elem, i) => {
+          {products.length && products.map((elem) => {
             return (
               <TableRow id={elem.id} key={elem.id}>
                 <TableCell>{elem.name}</TableCell>
@@ -42,6 +44,7 @@ function ProductsPage(props) {
           })}
         </TableBody>
       </Table>
+      <AddProductForm />
     </Paper>
   );
 }
